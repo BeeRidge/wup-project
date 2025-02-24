@@ -1,243 +1,199 @@
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-
-import { useTheme } from "@/hooks/use-theme";
-
-import { overviewData, recentSalesData, topProducts } from "@/constants";
-
-import { Footer } from "@/layouts/footer";
-
-import { CreditCard, DollarSign, Package, PencilLine, Star, Trash, TrendingUp, Users } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart, Users, Activity, CheckCircle } from "lucide-react";
+import { ResponsiveContainer, Bar, BarChart as ReBarChart, XAxis, YAxis, Tooltip } from "recharts";
+import { eKonsultaData } from "../../constants";
+import { staticChartData } from "../../constants";
+import { latestMember } from "../../constants";
+import { useState } from "react";
 
 const DashboardPage = () => {
-    const { theme } = useTheme();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    const filteredMembers = latestMember.filter((member) =>
+        Object.values(member || {})
+            .join(" ")
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()),
+    );
+
+    // Pagination
+    const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const selectedMembers = filteredMembers.slice(startIndex, startIndex + itemsPerPage);
 
     return (
-        <div className="flex flex-col gap-y-4">
-            <h1 className="title">Dashboard</h1>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                <div className="card">
-                    <div className="card-header">
-                        <div className="w-fit rounded-lg bg-green-500/20 p-2 text-green-500 transition-colors dark:bg-green-600/20 dark:text-green-600">
-                            <Package size={26} />
-                        </div>
-                        <p className="card-title">Total Products</p>
-                    </div>
-                    <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
-                        <p className="text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50">25,154</p>
-                        <span className="flex w-fit items-center gap-x-2 rounded-full border border-green-500 px-2 py-1 font-medium text-green-500 dark:border-green-600 dark:text-green-600">
-                            <TrendingUp size={18} />
-                            25%
-                        </span>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-header">
-                        <div className="rounded-lg bg-green-500/20 p-2 text-green-500 transition-colors dark:bg-green-600/20 dark:text-green-600">
-                            <DollarSign size={26} />
-                        </div>
-                        <p className="card-title">Total Paid Orders</p>
-                    </div>
-                    <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
-                        <p className="text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50">$16,000</p>
-                        <span className="flex w-fit items-center gap-x-2 rounded-full border border-green-500 px-2 py-1 font-medium text-green-500 dark:border-green-600 dark:text-green-600">
-                            <TrendingUp size={18} />
-                            12%
-                        </span>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-header">
-                        <div className="rounded-lg bg-green-500/20 p-2 text-green-500 transition-colors dark:bg-green-600/20 dark:text-green-600">
-                            <Users size={26} />
-                        </div>
-                        <p className="card-title">Total Customers</p>
-                    </div>
-                    <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
-                        <p className="text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50">15,400k</p>
-                        <span className="flex w-fit items-center gap-x-2 rounded-full border border-green-500 px-2 py-1 font-medium text-green-500 dark:border-green-600 dark:text-green-600">
-                            <TrendingUp size={18} />
-                            15%
-                        </span>
-                    </div>
-                </div>
-                <div className="card">
-                    <div className="card-header">
-                        <div className="rounded-lg bg-green-500/20 p-2 text-green-500 transition-colors dark:bg-green-600/20 dark:text-green-600">
-                            <CreditCard size={26} />
-                        </div>
-                        <p className="card-title">Sales</p>
-                    </div>
-                    <div className="card-body bg-slate-100 transition-colors dark:bg-slate-950">
-                        <p className="text-3xl font-bold text-slate-900 transition-colors dark:text-slate-50">12,340</p>
-                        <span className="flex w-fit items-center gap-x-2 rounded-full border border-green-500 px-2 py-1 font-medium text-green-500 dark:border-green-600 dark:text-green-600">
-                            <TrendingUp size={18} />
-                            19%
-                        </span>
-                    </div>
-                </div>
+        <div className="flex flex-wrap gap-6">
+            {/* Stats Cards */}
+            <div className="flex w-full flex-wrap gap-6">
+                <Card className="min-w-[280px] flex-1">
+                    <CardHeader>
+                        <CardTitle>Total eKonsulta Members</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between">
+                        <Users
+                            size={32}
+                            className="text-blue-500"
+                        />
+                        <span className="text-2xl font-bold">{eKonsultaData.totalMembers}</span>
+                    </CardContent>
+                </Card>
+
+                <Card className="min-w-[280px] flex-1">
+                    <CardHeader>
+                        <CardTitle>1st Tranche Members</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between">
+                        <Activity
+                            size={32}
+                            className="text-green-500"
+                        />
+                        <span className="text-2xl font-bold">{eKonsultaData.firstTranche}</span>
+                    </CardContent>
+                </Card>
+
+                <Card className="min-w-[280px] flex-1">
+                    <CardHeader>
+                        <CardTitle>2nd Tranche Members</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between">
+                        <Activity
+                            size={32}
+                            className="text-yellow-500"
+                        />
+                        <span className="text-2xl font-bold">{eKonsultaData.secondTranche}</span>
+                    </CardContent>
+                </Card>
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <div className="card col-span-1 md:col-span-2 lg:col-span-4">
-                    <div className="card-header">
-                        <p className="card-title">Overview</p>
-                    </div>
-                    <div className="card-body p-0">
+
+            {/* Consultation Trends & Patient Satisfaction (2 columns in 1 row) */}
+            <div className="flex w-full gap-6">
+                <Card className="flex-1">
+                    <CardHeader>
+                        <CardTitle>Consultation Trends</CardTitle>
+                    </CardHeader>
+                    <CardContent>
                         <ResponsiveContainer
                             width="100%"
-                            height={300}
+                            height={250}
                         >
-                            <AreaChart
-                                data={overviewData}
-                                margin={{
-                                    top: 0,
-                                    right: 0,
-                                    left: 0,
-                                    bottom: 0,
-                                }}
-                            >
-                                <defs>
-                                    <linearGradient
-                                        id="colorTotal"
-                                        x1="0"
-                                        y1="0"
-                                        x2="0"
-                                        y2="1"
-                                    >
-                                        <stop
-                                            offset="5%"
-                                            stopColor="#007F5F"
-                                            stopOpacity={0.8}
-                                        />
-                                        <stop
-                                            offset="95%"
-                                            stopColor="#007F5F"
-                                            stopOpacity={0}
-                                        />
-                                    </linearGradient>
-                                </defs>
-                                <Tooltip
-                                    cursor={false}
-                                    formatter={(value) => `$${value}`}
-                                />
-
+                            <ReBarChart data={staticChartData}>
                                 <XAxis
                                     dataKey="name"
-                                    strokeWidth={0}
-                                    stroke={theme === "light" ? "#475569" : "#94a3b8"}
-                                    tickMargin={6}
+                                    stroke="#888"
                                 />
-                                <YAxis
-                                    dataKey="total"
-                                    strokeWidth={0}
-                                    stroke={theme === "light" ? "#475569" : "#94a3b8"}
-                                    tickFormatter={(value) => `$${value}`}
-                                    tickMargin={6}
+                                <YAxis />
+                                <Tooltip />
+                                <Bar
+                                    dataKey="consultations"
+                                    fill="#379777"
+                                    radius={[5, 5, 0, 0]}
                                 />
-
-                                <Area
-                                    type="monotone"
-                                    dataKey="total"
-                                    stroke="#007F5F"
-                                    fillOpacity={1}
-                                    fill="url(#colorTotal)"
-                                />
-                            </AreaChart>
+                            </ReBarChart>
                         </ResponsiveContainer>
-                    </div>
-                </div>
-                <div className="card col-span-1 md:col-span-2 lg:col-span-3">
-                    <div className="card-header">
-                        <p className="card-title">Membership Overview</p>
-                    </div>
-                    <div className="card-body h-[300px] overflow-auto p-0">
-                        {recentSalesData.map((sale) => (
-                            <div
-                                key={sale.id}
-                                className="flex items-center justify-between gap-x-4 py-2 pr-2"
-                            >
-                                <div className="flex items-center gap-x-4">
-                                    <img
-                                        src={sale.image}
-                                        alt={sale.name}
-                                        className="size-10 flex-shrink-0 rounded-full object-cover"
-                                    />
-                                    <div className="flex flex-col gap-y-2">
-                                        <p className="font-medium text-slate-900 dark:text-slate-50">{sale.name}</p>
-                                        <p className="text-sm text-slate-600 dark:text-slate-400">{sale.email}</p>
-                                    </div>
-                                </div>
-                                <p className="font-medium text-slate-900 dark:text-slate-50">${sale.total}</p>
+                    </CardContent>
+                </Card>
+
+                <Card className="flex-1">
+                    <CardHeader>
+                        <CardTitle>Patient Satisfaction</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between">
+                        <CheckCircle
+                            size={32}
+                            className="text-purple-500"
+                        />
+                        <span className="text-2xl font-bold">{eKonsultaData.patientSatisfaction}%</span>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="text-10xl flex justify-start rounded-lg bg-white p-5">
+                <CardTitle>Latest Members Joined</CardTitle>
+            </div>
+            {/* Table*/}
+            <div className="flex w-full flex-col gap-4">
+                <Card>
+                    <CardHeader>
+                        {/* Search */}
+                        <div className="flex w-full justify-end py-2 text-green-700">
+                            <input
+                                type="text"
+                                placeholder="Search members..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-1/3 rounded-md border border-green-700 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            />
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        {selectedMembers.length > 0 ? (
+                            <div className="overflow-x-auto">
+                                <table className="w-full border-collapse border border-gray-300">
+                                    <thead>
+                                        <tr className="bg-gray-100 text-left">
+                                            <th className="border p-2">ID</th>
+                                            <th className="border p-2">PIN</th>
+                                            <th className="border p-2">Name</th>
+                                            <th className="border p-2">Sex</th>
+                                            <th className="border p-2">Member Type</th>
+                                            <th className="border p-2">Contact No.</th>
+                                            <th className="border p-2">Registration Date</th>
+                                            <th className="border p-2">Effective Period</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {selectedMembers.map((member, index) => (
+                                            <tr
+                                                key={index}
+                                                className="hover:bg-gray-50"
+                                            >
+                                                <td className="border p-2">{member.id}</td>
+                                                <td className="border p-2">{member.Pin}</td>
+                                                <td className="border p-2">
+                                                    {member.FirstName} {member.MiddleName} {member.LastName} {member.Suffix}
+                                                </td>
+                                                <td className="border p-2">{member.Sex}</td>
+                                                <td className="border p-2">{member.MemberType}</td>
+                                                <td className="border p-2">{member.ContactNo}</td>
+                                                <td className="border p-2">{member.RegistrationDate}</td>
+                                                <td className="border p-2">{member.EffectivePeriod}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                        ) : (
+                            <p className="text-gray-500">No recent members found.</p>
+                        )}
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="mt-4 flex items-center justify-center gap-5 text-green-700">
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                    className="rounded-md border bg-green-700 px-4 py-2 text-white hover:bg-gray-300 disabled:opacity-50"
+                                >
+                                    Previous
+                                </button>
+
+                                <span>
+                                    Page {currentPage} of {totalPages}
+                                </span>
+
+                                <button
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                    className="rounded-md border bg-green-700 px-4 py-2 text-white hover:bg-gray-300 disabled:opacity-50"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
-            <div className="card">
-                <div className="card-header">
-                    <p className="card-title">Top Orders</p>
-                </div>
-                <div className="card-body p-0">
-                    <div className="relative h-[500px] w-full flex-shrink-0 overflow-auto rounded-none [scrollbar-width:_thin]">
-                        <table className="table">
-                            <thead className="table-header">
-                                <tr className="table-row">
-                                    <th className="table-head">#</th>
-                                    <th className="table-head">Product</th>
-                                    <th className="table-head">Price</th>
-                                    <th className="table-head">Status</th>
-                                    <th className="table-head">Rating</th>
-                                    <th className="table-head">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="table-body">
-                                {topProducts.map((product) => (
-                                    <tr
-                                        key={product.number}
-                                        className="table-row"
-                                    >
-                                        <td className="table-cell">{product.number}</td>
-                                        <td className="table-cell">
-                                            <div className="flex w-max gap-x-4">
-                                                <img
-                                                    src={product.image}
-                                                    alt={product.name}
-                                                    className="size-14 rounded-lg object-cover"
-                                                />
-                                                <div className="flex flex-col">
-                                                    <p>{product.name}</p>
-                                                    <p className="font-normal text-slate-600 dark:text-slate-400">{product.description}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="table-cell">${product.price}</td>
-                                        <td className="table-cell">{product.status}</td>
-                                        <td className="table-cell">
-                                            <div className="flex items-center gap-x-2">
-                                                <Star
-                                                    size={18}
-                                                    className="fill-yellow-600 stroke-yellow-600"
-                                                />
-                                                {product.rating}
-                                            </div>
-                                        </td>
-                                        <td className="table-cell">
-                                            <div className="flex items-center gap-x-4">
-                                                <button className="text-green-500 dark:text-green-600">
-                                                    <PencilLine size={20} />
-                                                </button>
-                                                <button className="text-red-500">
-                                                    <Trash size={20} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <Footer />
         </div>
     );
 };
