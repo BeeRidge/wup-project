@@ -4,9 +4,24 @@ import { ResponsiveContainer, Bar, BarChart as ReBarChart, XAxis, YAxis, Tooltip
 import { eKonsultaData } from "../../constants";
 import { staticChartData } from "../../constants";
 import { latestMember } from "../../constants";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AuthMessage from "../auth/AuthMessage";
+import { useLocation } from "react-router-dom";
 
 const DashboardPage = () => {
+    const location = useLocation();
+    const [status, setStatus] = useState(location.state?.status || null);
+
+    useEffect(() => {
+        if (status) {
+            const timer = setTimeout(() => {
+                setStatus(null);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [status]);
+
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
@@ -24,7 +39,8 @@ const DashboardPage = () => {
     const selectedMembers = filteredMembers.slice(startIndex, startIndex + itemsPerPage);
 
     return (
-        <div className="flex flex-wrap gap-6">
+        <div className="flex w-full flex-wrap gap-6">
+            <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
             {/* Stats Cards */}
             <div className="flex w-full flex-wrap gap-6">
                 <Card className="min-w-[280px] flex-1">

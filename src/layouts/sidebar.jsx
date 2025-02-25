@@ -3,9 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import { navbarLinks } from "@/constants";
 
-import logoLight from "@/assets/logo-light.svg";
-import logoDark from "@/assets/logo-dark.svg";
-
+import logo from "@/assets/logo/logogg.png";
 import { cn } from "@/utils/cn";
 
 import PropTypes from "prop-types";
@@ -22,13 +20,13 @@ export const Sidebar = forwardRef(({ collapsed }, ref) => {
         >
             <div className="flex gap-x-3 p-3">
                 <img
-                    src={logoLight}
-                    alt="Logoipsum"
+                    src={logo}
+                    alt="Logo"
                     className="dark:hidden"
                 />
                 <img
-                    src={logoDark}
-                    alt="Logoipsum"
+                    src={logo}
+                    alt="Logo"
                     className="hidden dark:block"
                 />
                 {!collapsed && <p className="text-lg font-medium text-slate-900 transition-colors dark:text-slate-50">Ekunsolta Analytical System</p>}
