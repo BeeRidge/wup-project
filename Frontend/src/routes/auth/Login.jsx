@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from "@/assets/logo/logogg.png";
 import AuthMessage from "./AuthMessage";
+
 const Login = () => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    /* message  */
-    const [status, setstatus] = useState(null);
+    const [status, setStatus] = useState(null);
 
     useEffect(() => {
         if (status) {
@@ -19,17 +20,23 @@ const Login = () => {
         }
     }, [status]);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
-        // Simulating authentication (Replace with actual authentication logic)
-        if (email === "ivan@gmail.com" && password === "1234") {
-            localStorage.setItem("isAuthenticated", "true"); // Store auth status
-            setTimeout(() => {
-                navigate("/dashboard", { state: { status: "success" } });
-            }, 1500);
-        } else {
-            setstatus("error");
+        try {
+            const response = await axios.post("http://localhost:8081/api/login", {
+                username,
+                password,
+            });
+            
+            if (response.data.status === "success") {
+                localStorage.setItem("isAuthenticated", "true");
+                setTimeout(() => {
+                    navigate("/dashboard", { state: { status: "success" } });
+                }, 1500);
+            }
+        } catch (error) {
+            setStatus("error");
         }
     };
 
@@ -44,28 +51,19 @@ const Login = () => {
                     />
                 </div>
                 {status && <AuthMessage status={status} />}
-                <form
-                    onSubmit={handleLogin}
-                    className="space-y-4"
-                >
-                    <label
-                        htmlFor="email"
-                        className="text-md block font-medium text-gray-700"
-                    >
-                        Email
+                <form onSubmit={handleLogin} className="space-y-4">
+                    <label htmlFor="username" className="text-md block font-medium text-gray-700">
+                        Username
                     </label>
                     <input
-                        type="email"
-                        placeholder="Email"
+                        type="text"
+                        placeholder="Username"
                         className="mt-1 w-full rounded-lg border p-2"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
 
-                    <label
-                        htmlFor="password"
-                        className="text-md block font-medium text-gray-700"
-                    >
+                    <label htmlFor="password" className="text-md block font-medium text-gray-700">
                         Password
                     </label>
                     <input
@@ -75,18 +73,12 @@ const Login = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <button
-                        type="submit"
-                        className="w-full rounded-lg bg-green-500 p-2 text-white"
-                    >
+                    <button type="submit" className="w-full rounded-lg bg-green-500 p-2 text-white">
                         Login
                     </button>
                     <p className="text-center">
-                        Create an Account?{" "}
-                        <a
-                            class="text-blue-800"
-                            href=""
-                        >
+                        Create an Account? {" "}
+                        <a className="text-blue-800" href="">
                             Click here
                         </a>
                     </p>

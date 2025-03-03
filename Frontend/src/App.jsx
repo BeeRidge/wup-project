@@ -1,4 +1,4 @@
-/* import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { useEffect, useState } from "react";
 import Layout from "@/routes/layout";
@@ -73,9 +73,9 @@ function App() {
 }
 
 export default App;
- */
 
-import React, { useEffect, useState } from 'react';
+
+/* import React, { useEffect, useState } from 'react';
 
 function App() {
     const [data, setData] = useState([]);
@@ -120,4 +120,4 @@ function App() {
     );
 }
 
-export default App;
+export default App; */
