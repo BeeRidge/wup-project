@@ -11,7 +11,7 @@ import {
     COLORS,
     activeConsultationsData,
 } from "../../constants";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import AuthMessage from "../auth/AuthMessage";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "@/hooks/use-theme";
@@ -20,6 +20,23 @@ const DashboardPage = () => {
     const { theme, setheme } = useTheme();
     const location = useLocation();
     const [status, setStatus] = useState(location.state?.status || null);
+
+    const [OpenDropdown, setOpenDropdown] = useState(false);
+    const Dropdownref = useRef();
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (Dropdownref.current && Dropdownref.current.contains(event.target)) {
+                setOpenDropdown(false);
+            }
+        }
+        if (open) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => {
+            document.addEventListener("mousedown", handleClickOutside);
+        };
+    }, [OpenDropdown]);
 
     useEffect(() => {
         if (status) {
@@ -49,6 +66,19 @@ const DashboardPage = () => {
 
     return (
         <div className="flex w-full flex-wrap gap-6">
+            <div>
+                <div
+                    className="relative"
+                    ref={Dropdownref}
+                >
+                    {/* Profile Button */}
+                    <button
+                        className="size-10 w-auto overflow-hidden rounded-md bg-white p-2 shadow-md"
+                        onClick={() => setdropdown(!isOpen)}
+                    ></button>
+                </div>
+            </div>
+
             <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
             {/* Stats Cards */}
             <div className="flex w-full flex-wrap gap-6">
@@ -242,7 +272,7 @@ const DashboardPage = () => {
                             <div className="overflow-x-auto">
                                 <table className="w-full border-collapse">
                                     <thead>
-                                        <tr className="bg-gray-100 text-center">
+                                        <tr className="text-center">
                                             <th className="px-4 py-2">ID</th>
                                             <th className="px-4 py-2">PIN</th>
                                             <th className="px-4 py-2">Name</th>
