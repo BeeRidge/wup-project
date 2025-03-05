@@ -1,4 +1,18 @@
-import { ChartColumn, Home, NotepadText, Package, PackagePlus, Settings, ShoppingBag, UserCheck, UserPlus, Users } from "lucide-react";
+import {
+    ChartColumn,
+    Home,
+    NotepadText,
+    Package,
+    PackagePlus,
+    Settings,
+    ShoppingBag,
+    UserCheck,
+    UserPlus,
+    Users,
+    CheckCircle,
+    AlertTriangle,
+    XCircle,
+} from "lucide-react";
 
 import ProfileImage from "@/assets/no-profile.jpg";
 import ProductImage from "@/assets/product-image.jpg";
@@ -10,13 +24,9 @@ export const navbarLinks = [
             {
                 label: "Dashboard",
                 icon: Home,
-                path: "/",
+                path: "/Dashboard",
             },
-            {
-                label: "Analytics",
-                icon: ChartColumn,
-                path: "/analytics",
-            },
+
             {
                 label: "Reports",
                 icon: NotepadText,
@@ -548,4 +558,40 @@ export const topProducts = [
         status: "Out of Stock",
         rating: 4.5,
     },
+];
+
+export const consultationTrends = [
+    { month: "Jan", count: 120 },
+    { month: "Feb", count: 98 },
+    { month: "Mar", count: 150 },
+    { month: "Apr", count: 130 },
+    { month: "May", count: 170 },
+    { month: "Jun", count: 140 },
+    { month: "Jul", count: 180 },
+    { month: "Aug", count: 160 },
+    { month: "Sep", count: 190 },
+    { month: "Oct", count: 210 },
+    { month: "Nov", count: 175 },
+    { month: "Dec", count: 200 },
+];
+
+export const diagnosedConditions = [
+    { name: "Hypertension", count: 120 },
+    { name: "Diabetes", count: 90 },
+    { name: "Respiratory Infections", count: 75 },
+    { name: "Heart Disease", count: 60 },
+    { name: "Gastrointestinal Disorders", count: 50 },
+];
+
+export const satisfactionData = [
+    { name: "Satisfied", value: eKonsultaData.patientSatisfaction },
+    { name: "Remaining", value: 100 - eKonsultaData.patientSatisfaction },
+];
+
+export const COLORS = ["#9333ea", "#e5e7eb"];
+
+export const activeConsultationsData = [
+    { id: 1, count: 18 },
+    { id: 2, count: 25 },
+    { id: 3, count: 12 },
 ];
