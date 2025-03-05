@@ -82,7 +82,6 @@ const DashboardPage = () => {
                     </CardContent>
                 </Card>
             </div>
-
             {/* Consultation Trends & Patient Satisfaction (2 columns in 1 row) */}
             <div className="flex w-full gap-6">
                 <Card className="flex-1">
@@ -124,15 +123,16 @@ const DashboardPage = () => {
                     </CardContent>
                 </Card>
             </div>
-            <div className="text-10xl flex justify-start rounded-lg bg-white p-5">
-                <CardTitle>Latest Members Joined</CardTitle>
-            </div>
+
             {/* Table*/}
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex w-full gap-4">
                 <Card>
+                    <CardTitle className="flex">Latest Members Joined</CardTitle>
+
                     <CardHeader>
                         {/* Search */}
-                        <div className="flex w-full justify-end py-2 text-green-700">
+
+                        <div className="flex justify-end py-2 text-green-700">
                             <input
                                 type="text"
                                 placeholder="Search members..."
@@ -145,35 +145,35 @@ const DashboardPage = () => {
                     <CardContent>
                         {selectedMembers.length > 0 ? (
                             <div className="overflow-x-auto">
-                                <table className="w-full border-collapse border border-gray-300">
+                                <table className="w-full border-collapse">
                                     <thead>
-                                        <tr className="bg-gray-100 text-left">
-                                            <th className="border p-2">ID</th>
-                                            <th className="border p-2">PIN</th>
-                                            <th className="border p-2">Name</th>
-                                            <th className="border p-2">Sex</th>
-                                            <th className="border p-2">Member Type</th>
-                                            <th className="border p-2">Contact No.</th>
-                                            <th className="border p-2">Registration Date</th>
-                                            <th className="border p-2">Effective Period</th>
+                                        <tr className="bg-gray-100 text-center">
+                                            <th className="px-4 py-2">ID</th>
+                                            <th className="px-4 py-2">PIN</th>
+                                            <th className="px-4 py-2">Name</th>
+                                            <th className="px-4 py-2">Sex</th>
+                                            <th className="px-4 py-2">Member Type</th>
+                                            <th className="px-4 py-2">Contact No.</th>
+                                            <th className="px-4 py-2">Registration Date</th>
+                                            <th className="px-4 py-2">Effective Period</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {selectedMembers.map((member, index) => (
                                             <tr
                                                 key={index}
-                                                className="hover:bg-gray-50"
+                                                className="text-center hover:bg-gray-50"
                                             >
-                                                <td className="border p-2">{member.id}</td>
-                                                <td className="border p-2">{member.Pin}</td>
-                                                <td className="border p-2">
+                                                <td className="px-4 py-2">{member.id}</td>
+                                                <td className="px-4 py-2">{member.Pin}</td>
+                                                <td className="px-4 py-2">
                                                     {member.FirstName} {member.MiddleName} {member.LastName} {member.Suffix}
                                                 </td>
-                                                <td className="border p-2">{member.Sex}</td>
-                                                <td className="border p-2">{member.MemberType}</td>
-                                                <td className="border p-2">{member.ContactNo}</td>
-                                                <td className="border p-2">{member.RegistrationDate}</td>
-                                                <td className="border p-2">{member.EffectivePeriod}</td>
+                                                <td className="px-4 py-2">{member.Sex}</td>
+                                                <td className="px-4 py-2">{member.MemberType}</td>
+                                                <td className="px-4 py-2">{member.ContactNo}</td>
+                                                <td className="px-4 py-2">{member.RegistrationDate}</td>
+                                                <td className="px-4 py-2">{member.EffectivePeriod}</td>
                                             </tr>
                                         ))}
                                     </tbody>

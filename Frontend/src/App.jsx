@@ -10,7 +10,7 @@ import Login from "./routes/auth/Login";
 import "./index.css";
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
 
     useEffect(() => {
         // Check if user is authenticated (stored in localStorage)
@@ -73,7 +73,6 @@ function App() {
 }
 
 export default App;
-
 
 /* import React, { useEffect, useState } from 'react';
 
