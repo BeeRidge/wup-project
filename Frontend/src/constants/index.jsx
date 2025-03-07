@@ -42,7 +42,7 @@ export const navbarLinks = [
                 icon: Users,
                 path: "/Membership",
             },
-            {
+            /* {
                 label: "First Tranches",
                 icon: UserPlus,
                 path: "/First-Tranches",
@@ -51,7 +51,7 @@ export const navbarLinks = [
                 label: "Second Tranches",
                 icon: UserCheck,
                 path: "/Second-Tranches",
-            },
+            }, */
         ],
     },
 
@@ -279,6 +279,7 @@ export const membershipData = [
         ContactNo: "09123456789",
         RegistrationDate: "2024-01-15",
         EffectivePeriod: "2024-01-15 to 2025-01-15",
+        batch: "First Tranche"
     },
     {
         id: 2,
@@ -292,6 +293,7 @@ export const membershipData = [
         ContactNo: "09234567890",
         RegistrationDate: "2024-02-10",
         EffectivePeriod: "2024-02-10 to 2025-02-10",
+        batch: "First Tranche"
     },
     {
         id: 3,
@@ -305,6 +307,7 @@ export const membershipData = [
         ContactNo: "09345678901",
         RegistrationDate: "2024-03-05",
         EffectivePeriod: "2024-03-05 to 2025-03-05",
+        batch: "First Tranche"
     },
     {
         id: 4,
@@ -318,6 +321,7 @@ export const membershipData = [
         ContactNo: "09456789012",
         RegistrationDate: "2024-04-20",
         EffectivePeriod: "2024-04-20 to 2025-04-20",
+        batch: "Second Tranche"
     },
     {
         id: 5,
@@ -331,6 +335,7 @@ export const membershipData = [
         ContactNo: "09567890123",
         RegistrationDate: "2024-05-15",
         EffectivePeriod: "2024-05-15 to 2025-05-15",
+         batch: "Second Tranche"
     },
     {
         id: 6,
@@ -344,6 +349,7 @@ export const membershipData = [
         ContactNo: "09678901234",
         RegistrationDate: "2024-06-10",
         EffectivePeriod: "2024-06-10 to 2025-06-10",
+         batch: "Second Tranche"
     },
     {
         id: 7,
@@ -357,6 +363,7 @@ export const membershipData = [
         ContactNo: "09789012345",
         RegistrationDate: "2024-07-01",
         EffectivePeriod: "2024-07-01 to 2025-07-01",
+         batch: "First Tranche"
     },
     {
         id: 8,
@@ -370,6 +377,7 @@ export const membershipData = [
         ContactNo: "09890123456",
         RegistrationDate: "2024-08-05",
         EffectivePeriod: "2024-08-05 to 2025-08-05",
+         batch: "Latest Member"
     },
     {
         id: 9,
@@ -383,6 +391,7 @@ export const membershipData = [
         ContactNo: "09901234567",
         RegistrationDate: "2024-09-12",
         EffectivePeriod: "2024-09-12 to 2025-09-12",
+         batch: "Latest Member"
     },
     {
         id: 10,
@@ -396,6 +405,8 @@ export const membershipData = [
         ContactNo: "09912345678",
         RegistrationDate: "2024-10-20",
         EffectivePeriod: "2024-10-20 to 2025-10-20",
+         batch: "Latest Member"
+
     },
 ];
 
@@ -595,3 +606,10 @@ export const activeConsultationsData = [
     { id: 2, count: 25 },
     { id: 3, count: 12 },
 ];
+
+export const DashboardDropdown = [
+    { id: 1, name: "TimeFrame", options: ["Last 7 days", "This Month", "This Year", "Custom"] },
+    { id: 2, name: "Hospital", options: ["Option A", "Option B", "Option C"] },
+    { id: 3, name: "None", options: ["Option X", "Option Y", "Option Z"] }
+
+]

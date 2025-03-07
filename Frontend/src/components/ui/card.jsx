@@ -3,11 +3,11 @@ export function Card({ children, className }) {
 }
 
 export function CardHeader({ children }) {
-    return <div className="text-md mb-2 font-semibold">{children}</div>;
+    return <div className="text-lg mb-2 font-semibold">{children}</div>;
 }
 
 export function CardTitle({ children }) {
-    return <h2 className="text-md font-semibold">{children}</h2>;
+    return <h2 className="text-lg font-semibold">{children}</h2>;
 }
 
 export function CardContent({ children, className }) {

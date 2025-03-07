@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Users, Activity, CheckCircle } from "lucide-react";
 import { ResponsiveContainer, Bar, BarChart as ReBarChart, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from "recharts";
+import { FiChevronDown } from "react-icons/fi";
 import {
     latestMember,
     eKonsultaData,
@@ -10,6 +11,7 @@ import {
     satisfactionData,
     COLORS,
     activeConsultationsData,
+    DashboardDropdown,
 } from "../../constants";
 import { useState, useEffect, useRef } from "react";
 import AuthMessage from "../auth/AuthMessage";
@@ -66,20 +68,43 @@ const DashboardPage = () => {
 
     return (
         <div className="flex w-full flex-wrap gap-6">
-            <div>
-                <div
-                    className="relative"
-                    ref={Dropdownref}
-                >
-                    {/* Profile Button */}
+
+ <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
+
+
+            <div className="flex justify-between text-center w-full gap-5">
+              {DashboardDropdown.map((Menu) => (
+                <div key={Menu.id} className="relative" ref={Dropdownref}>
+                    {/* Dropdown Button */}
                     <button
-                        className="size-10 w-auto overflow-hidden rounded-md bg-white p-2 shadow-md"
-                        onClick={() => setdropdown(!isOpen)}
-                    ></button>
+                        className=" flex item-center w-80 justify-between size-10  overflow-hidden rounded-lg bg-white p-2 shadow-md"
+                        onClick={() =>
+                            setOpenDropdown((prev) => (prev === Menu.id ? null : Menu.id))
+                        }
+                    >
+                        {Menu.name}
+                        <FiChevronDown className=" flex ml-4 mb-1 text-gray-600" />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {OpenDropdown === Menu.id && (
+                        <div className="absolute left-0 mt-2 w-80 bg-white shadow-lg rounded-md py-2 border">
+                            {Menu.options.map((option, index) => (
+                                <a
+                                    key={index}
+                                    href="#"
+                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                                >
+                                    {option}
+                                </a>
+                            ))}
+                        </div>
+                    )}
                 </div>
+            ))}
             </div>
 
-            <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
+           
             {/* Stats Cards */}
             <div className="flex w-full flex-wrap gap-6">
                 <Card className="min-w-[280px] flex-1 dark:bg-slate-800 dark:text-white">
@@ -205,7 +230,7 @@ const DashboardPage = () => {
                     <CardContent>
                         <ResponsiveContainer
                             width="100%"
-                            height={250}
+                            height={400}
                         >
                             <ReBarChart data={consultationTrends}>
                                 <XAxis
@@ -262,7 +287,7 @@ const DashboardPage = () => {
                                     placeholder="Search members..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full rounded-md border border-green-700 p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                    className="w-full rounded-md border border-green-700 p-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 />
                             </div>
                         </CardHeader>
