@@ -8,6 +8,7 @@ import SecondTranches from "./routes/Membership/SecondTranches";
 import FirstTranches from "./routes/Membership/FirstTranches";
 import Login from "./routes/auth/Login";
 import "./index.css";
+import ReportPage from "./routes/reports/report-page";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,7 +40,7 @@ function App() {
                 },
                 {
                     path: "reports",
-                    element: isAuthenticated ? <h1 className="title">Reports</h1> : <Navigate to="/login" />,
+                    element: isAuthenticated ? <ReportPage/> : <Navigate to="/login" />,
                 },
                 {
                     path: "Membership",

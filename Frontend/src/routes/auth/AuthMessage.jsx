@@ -23,9 +23,8 @@ const AuthMessage = ({ status }) => {
 
     return (
         <div
-            className={`mb-2 mt-2 rounded-lg p-3 text-center text-sm font-semibold transition-opacity duration-500 ${
-                fading ? "opacity-100" : "opacity-0"
-            } ${status === "error" ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"}`}
+            className={`mb-2 mt-2 rounded-lg p-3 text-center  text-sm font-semibold transition-opacity duration-500 ${fading ? "opacity-100" : "opacity-0"
+                } ${status === "error" ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"}`}
         >
             {status === "error" ? "Incorrect password. Please try again." : "Welcome back!"}
         </div>
