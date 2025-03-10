@@ -335,7 +335,7 @@ export const membershipData = [
         ContactNo: "09567890123",
         RegistrationDate: "2024-05-15",
         EffectivePeriod: "2024-05-15 to 2025-05-15",
-         batch: "Second Tranche"
+        batch: "Second Tranche"
     },
     {
         id: 6,
@@ -349,7 +349,7 @@ export const membershipData = [
         ContactNo: "09678901234",
         RegistrationDate: "2024-06-10",
         EffectivePeriod: "2024-06-10 to 2025-06-10",
-         batch: "Second Tranche"
+        batch: "Second Tranche"
     },
     {
         id: 7,
@@ -363,7 +363,7 @@ export const membershipData = [
         ContactNo: "09789012345",
         RegistrationDate: "2024-07-01",
         EffectivePeriod: "2024-07-01 to 2025-07-01",
-         batch: "First Tranche"
+        batch: "First Tranche"
     },
     {
         id: 8,
@@ -377,7 +377,7 @@ export const membershipData = [
         ContactNo: "09890123456",
         RegistrationDate: "2024-08-05",
         EffectivePeriod: "2024-08-05 to 2025-08-05",
-         batch: "Latest Member"
+        batch: "Latest Member"
     },
     {
         id: 9,
@@ -391,7 +391,7 @@ export const membershipData = [
         ContactNo: "09901234567",
         RegistrationDate: "2024-09-12",
         EffectivePeriod: "2024-09-12 to 2025-09-12",
-         batch: "Latest Member"
+        batch: "Latest Member"
     },
     {
         id: 10,
@@ -405,7 +405,7 @@ export const membershipData = [
         ContactNo: "09912345678",
         RegistrationDate: "2024-10-20",
         EffectivePeriod: "2024-10-20 to 2025-10-20",
-         batch: "Latest Member"
+        batch: "Latest Member"
 
     },
 ];
@@ -613,3 +613,59 @@ export const DashboardDropdown = [
     { id: 3, name: "None", options: ["Option X", "Option Y", "Option Z"] }
 
 ]
+
+export const checkupHistoryData = {
+    "10001": [
+        { date: "2024-03-05", findings: "Abdominal Pain", doctor: "Dr. Smith", status: "Completed" },
+        { date: "2024-02-15", findings: "Mild Fever", doctor: "Dr. Johnson", status: "Pending" },
+    ],
+    "10002": [
+        { date: "2024-03-10", findings: "Migraine", doctor: "Dr. Brown", status: "Completed" },
+        { date: "2024-02-20", findings: "Blurred Vision", doctor: "Dr. Davis", status: "Pending" },
+    ],
+    "10003": [
+        { date: "2024-03-07", findings: "Chest Pain", doctor: "Dr. Adams", status: "Completed" },
+        { date: "2024-02-28", findings: "Shortness of Breath", doctor: "Dr. Taylor", status: "Completed" },
+    ],
+    "10004": [
+        { date: "2024-02-25", findings: "Cough & Cold", doctor: "Dr. Lee", status: "Pending" },
+        { date: "2024-01-30", findings: "Sore Throat", doctor: "Dr. White", status: "Completed" },
+    ],
+    "10005": [
+        { date: "2024-03-01", findings: "Back Pain", doctor: "Dr. Wilson", status: "Completed" },
+        { date: "2024-02-10", findings: "Muscle Strain", doctor: "Dr. Harris", status: "Pending" },
+    ],
+    "10006": [
+        { date: "2024-03-08", findings: "Sprained Ankle", doctor: "Dr. Thomas", status: "Completed" },
+        { date: "2024-02-14", findings: "Swelling in Knee", doctor: "Dr. Martinez", status: "Pending" },
+    ],
+    "10007": [
+        { date: "2024-03-03", findings: "Skin Rash", doctor: "Dr. Robinson", status: "Completed" },
+        { date: "2024-02-22", findings: "Allergic Reaction", doctor: "Dr. Clark", status: "Completed" },
+    ],
+    "10008": [
+        { date: "2024-02-28", findings: "High Blood Pressure", doctor: "Dr. Rodriguez", status: "Pending" },
+        { date: "2024-01-25", findings: "Dizziness", doctor: "Dr. Lewis", status: "Completed" },
+    ],
+    "10009": [
+        { date: "2024-03-04", findings: "Ear Infection", doctor: "Dr. Walker", status: "Completed" },
+        { date: "2024-02-19", findings: "Hearing Loss", doctor: "Dr. Allen", status: "Pending" },
+    ],
+    "10010": [
+        { date: "2024-02-27", findings: "Toothache", doctor: "Dr. Young", status: "Completed" },
+        { date: "2024-01-20", findings: "Gum Inflammation", doctor: "Dr. King", status: "Completed" },
+    ],
+};
+
+export const selectedPatient = [
+    { pin: "10001", name: "John Doe" },
+    { pin: "10002", name: "Jane Smith" },
+    { pin: "10003", name: "Michael Johnson" },
+    { pin: "10004", name: "Emily Davis" },
+    { pin: "10005", name: "Daniel Brown" },
+    { pin: "10006", name: "Olivia Wilson" },
+    { pin: "10007", name: "Matthew Taylor" },
+    { pin: "10008", name: "Sophia Martinez" },
+    { pin: "10009", name: "James Anderson" },
+    { pin: "10010", name: "Isabella Thomas" },
+];

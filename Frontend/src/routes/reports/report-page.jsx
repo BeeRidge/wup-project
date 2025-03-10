@@ -7,10 +7,10 @@ const ReportPage = () => {
     // Checkup Filter Options
     const checkupOptions = ["All", "Abdomen", "Heart", "Lungs", "Kidney"];
 
-    // Internal Table Filter Options
+    const selectedPatient = { pin: "12345", name: "John Doe" }; // Example selected patient
+
     const tableFilterOptions = ["All", "Senior", "Regular", "Student"];
 
-    // Sample Patient Data
     const patientData = [
         { id: 1, pin: "P001", name: "John Doe", sex: "Male", type: "Senior", contact: "09123456789", checkup: "Abdomen", regDate: "2024-03-01", period: "1 Year" },
         { id: 2, pin: "P002", name: "Jane Smith", sex: "Female", type: "Regular", contact: "09234567890", checkup: "Heart", regDate: "2024-03-02", period: "1 Year" },
@@ -33,6 +33,7 @@ const ReportPage = () => {
     });
 
     return (
+
         <div className="p-6 space-y-6 bg-white dark:bg-gray-800 w-full shadow-md rounded-lg">
             {/* Header Section */}
             <div className="flex justify-between items-center">
@@ -119,6 +120,8 @@ const ReportPage = () => {
                 </table>
             </div>
         </div>
+
+
     );
 };
 
