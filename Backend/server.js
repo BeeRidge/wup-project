@@ -27,16 +27,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/profile', (req, res) => {
-    const sql = `SELECT ACCRE_NO, 
-                        PX_TYPE, 
-                        PX_LNAME, 
-                        PX_FNAME, 
-                        PX_MNAME, 
-                        PX_SEX, 
-                        ENLIST_DATE, 
-                        DATE_ADDED, 
-                        PX_MOBILE_NO 
-                        FROM 'tsekap_tbl_enlist' ORDER BY 'tsekap_tbl_enlist'.'TRANS_DATE' DESC`;
+    const sql = "SELECT ACCRE_NO, PX_TYPE, PX_LNAME, PX_FNAME, PX_MNAME, PX_SEX, ENLIST_DATE, DATE_ADDED, PX_MOBILE_NO FROM `tsekap_tbl_enlist` ORDER BY `tsekap_tbl_enlist`.`TRANS_DATE` DESC";
     db.query(sql, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
