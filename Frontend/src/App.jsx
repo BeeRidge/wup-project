@@ -9,6 +9,7 @@ import FirstTranches from "./routes/Membership/FirstTranches";
 import Login from "./routes/auth/Login";
 import "./index.css";
 import ReportPage from "./routes/reports/report-page";
+import SettingPage from "./routes/settings/setting-page";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,23 +41,23 @@ function App() {
                 },
                 {
                     path: "reports",
-                    element: isAuthenticated ? <ReportPage/> : <Navigate to="/login" />,
+                    element: isAuthenticated ? <ReportPage /> : <Navigate to="/login" />,
                 },
                 {
                     path: "Membership",
                     element: isAuthenticated ? <Membership /> : <Navigate to="/login" />,
                 },
-                {
-                    path: "First-Tranches",
-                    element: isAuthenticated ? <FirstTranches /> : <Navigate to="/login" />,
-                },
-                {
-                    path: "Second-Tranches",
-                    element: isAuthenticated ? <SecondTranches /> : <Navigate to="/login" />,
-                },
+                /*  {
+                     path: "First-Tranches",
+                     element: isAuthenticated ? <FirstTranches /> : <Navigate to="/login" />,
+                 },
+                 {
+                     path: "Second-Tranches",
+                     element: isAuthenticated ? <SecondTranches /> : <Navigate to="/login" />,
+                 }, */
                 {
                     path: "settings",
-                    element: isAuthenticated ? <h1 className="title">Settings</h1> : <Navigate to="/login" />,
+                    element: isAuthenticated ? <SettingPage /> : <Navigate to="/login" />,
                 },
             ],
         },

@@ -78,7 +78,7 @@ const DashboardPage = () => {
                     <div key={Menu.id} className="relative" ref={Dropdownref}>
                         {/* Dropdown Button */}
                         <button
-                            className=" flex item-center w-80 justify-between size-10  overflow-hidden rounded-lg bg-white p-2 shadow-md"
+                            className=" flex item-center w-80 justify-between size-10  overflow-hidden rounded-lg text-black bg-white p-2 shadow-md t dark:bg-gray-800 dark:text-white"
                             onClick={() =>
                                 setOpenDropdown((prev) => (prev === Menu.id ? null : Menu.id))
                             }
