@@ -1,13 +1,32 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const TrancheDataBreakdown = ({ firstTranche, secondTranche }) => {
-    const trancheData = [
-        { name: "1st Tranche", value: firstTranche },
-        { name: "2nd Tranche", value: secondTranche },
-    ];
-
+const TrancheDataBreakdown = () => {
     const COLORS = ["#34D399", "#FBBF24"]; // 1st = Green, 2nd = Yellow
+
+    const [trancheData, setTrancheData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [firstT, secondT] = await Promise.all([
+                    axios.get("http://localhost:8081/api/firstTranche"),
+                    axios.get("http://localhost:8081/api/secondTranche"),
+                ]);
+
+                setTrancheData([
+                    { name: "1st Tranche", value: firstT.data.FIRST_TRANCHE || 0 },
+                    { name: "2nd Tranche", value: secondT.data.SECOND_TRANCHE || 0 },
+                ]);
+            } catch (error) {
+                console.error("Error fetching tranche data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <Card className="flex-1 dark:bg-gray-800 dark:text-white">
@@ -15,7 +34,10 @@ const TrancheDataBreakdown = ({ firstTranche, secondTranche }) => {
                 <CardTitle>Tranche Data Breakdown</CardTitle>
             </CardHeader>
             <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
+                <ResponsiveContainer
+                    width="100%"
+                    height={250}
+                >
                     <PieChart>
                         <Pie
                             dataKey="value"
@@ -26,8 +48,11 @@ const TrancheDataBreakdown = ({ firstTranche, secondTranche }) => {
                             fill="#8884d8"
                             label
                         >
-                            {trancheData.map((_, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                            {trancheData.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={COLORS[index]}
+                                />
                             ))}
                         </Pie>
                         <Tooltip />
