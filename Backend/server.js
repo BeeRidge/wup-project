@@ -44,14 +44,26 @@ app.post('/api/login', (req, res) => {
     });
 });
 /* ------------------------------------------------------------------------------------------------------------- */
+// all members with the 1st and 2nd tranche
 app.get('/api/profile', (req, res) => {
     const sql = `SELECT ACCRE_NO, PX_TYPE, 
                         PX_LNAME, PX_FNAME, 
                         PX_MNAME, PX_SEX, 
-                        ENLIST_DATE, DATE_ADDED, 
-                        PX_MOBILE_NO 
-                FROM tsekap_tbl_enlist 
-                WHERE PX_TYPE = 'MM'
+                        PX_EXTNAME, ENLIST_DATE
+                FROM tsekap_hist_enlist
+                ORDER BY tsekap_hist_enlist.TRANS_DATE DESC`;
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+app.get('/api/secondMembers', (req, res) => {
+    const sql = `SELECT ACCRE_NO, PX_TYPE, 
+                        PX_LNAME, PX_FNAME, 
+                        PX_MNAME, PX_SEX, 
+                        PX_EXTNAME,ENLIST_DATE, 
+                        DATE_ADDED, PX_MOBILE_NO 
+                FROM tsekap_tbl_enlist
                 ORDER BY tsekap_tbl_enlist.TRANS_DATE DESC`;
     db.query(sql, (err, data) => {
         if (err) return res.json(err);
@@ -71,10 +83,9 @@ app.get('/api/memberCount', (req, res) => {
 });
 app.get('/api/firstTranche', (req, res) => {
     const sql = `
-        SELECT 
-            (SELECT COUNT(*) FROM tsekap_hist_enlist) - 
-            (SELECT COUNT(*) FROM tsekap_tbl_profile) 
+        SELECT COUNT(*) 
         AS FIRST_TRANCHE
+        FROM tsekap_hist_enlist
     `;
 
     db.query(sql, (err, data) => {
@@ -86,7 +97,7 @@ app.get('/api/secondTranche', (req, res) => {
     const sql = ` 
         SELECT COUNT(*)
         AS SECOND_TRANCHE 
-        FROM tsekap_tbl_profile
+        FROM tsekap_tbl_enlist
     `;
 
     db.query(sql, (err, data) => {

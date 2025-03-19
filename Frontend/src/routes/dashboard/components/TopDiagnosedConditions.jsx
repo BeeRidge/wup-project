@@ -22,7 +22,7 @@ const TopDiagnosedConditions = () => {
         <div className="flex">
             <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-lg dark:text-white">
                 <CardHeader>
-                    <CardTitle className="text-xl font-semibold tracking-wide text-[#c6ffdd]">Top Diagnosed Conditions</CardTitle>
+                    <CardTitle className="text-xl font-semibold tracking-wide text-[#c6ffdd]">Diagnosed Conditions</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent max-h-[300px] overflow-y-auto">

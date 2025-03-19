@@ -19,10 +19,6 @@ const StatsCard = () => {
                     axios.get("http://localhost:8081/api/secondTranche"),
                 ]);
 
-                console.log("Total Members Response:", totalRes.data);
-                console.log("First Tranche Response:", firstRes.data);
-                console.log("Second Tranche Response:", secondRes.data);
-
                 setMemberData({
                     totalMembers: totalRes.data.TOTAL_MEMBERS || 0,
                     firstTranche: firstRes.data.FIRST_TRANCHE || 0,
@@ -53,7 +49,7 @@ const StatsCard = () => {
 
             <Card className="min-w-[280px] flex-1 dark:bg-slate-800 dark:text-white">
                 <CardHeader>
-                    <CardTitle>1st Tranche Members</CardTitle>
+                    <CardTitle>1st Tranche</CardTitle>
                 </CardHeader>
                 <CardContent className="flex items-center justify-between">
                     <Activity
@@ -66,7 +62,7 @@ const StatsCard = () => {
 
             <Card className="min-w-[280px] flex-1 dark:bg-slate-800 dark:text-white">
                 <CardHeader>
-                    <CardTitle>2nd Tranche Members</CardTitle>
+                    <CardTitle>2nd Tranche</CardTitle>
                 </CardHeader>
                 <CardContent className="flex items-center justify-between">
                     <Activity

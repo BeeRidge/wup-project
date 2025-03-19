@@ -37,7 +37,7 @@ const MonthlyConsultations = () => {
     return (
         <Card className="flex-1 dark:bg-gray-800 dark:text-white">
             <CardHeader>
-                <CardTitle>Monthly Consultations Trend</CardTitle>
+                <CardTitle>Total Monthly Consultations</CardTitle>
             </CardHeader>
             <CardContent>
                 <ResponsiveContainer

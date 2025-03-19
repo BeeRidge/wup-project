@@ -106,10 +106,9 @@ const DashboardPage = () => {
                                             <th className="px-4 py-2">Last Name</th>
                                             <th className="px-4 py-2">First Name</th>
                                             <th className="px-4 py-2">Middle Name</th>
+                                            <th className="px-4 py-2">Ext.</th>
                                             <th className="px-4 py-2">Sex</th>
-                                            <th className="px-4 py-2">Phone No.</th>
                                             <th className="px-4 py-2">Enlist Date</th>
-                                            <th className="px-4 py-2">Date Added</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -131,10 +130,9 @@ const DashboardPage = () => {
                                                 <td className="px-4 py-2">{member.PX_LNAME}</td>
                                                 <td className="px-4 py-2">{member.PX_FNAME}</td>
                                                 <td className="px-4 py-2">{member.PX_MNAME}</td>
+                                                <td className="px-4 py-2">{member.PX_EXTNAME}</td>
                                                 <td className="px-4 py-2">{member.PX_SEX}</td>
-                                                <td className="px-4 py-2">{member.PX_MOBILE_NO}</td>
                                                 <td className="px-4 py-2">{formatDate(member.ENLIST_DATE)}</td>
-                                                <td className="px-4 py-2">{formatDate(member.DATE_ADDED)}</td>
                                             </tr>
                                         ))}
                                     </tbody>
