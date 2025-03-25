@@ -20,7 +20,7 @@ const TopDiagnosedConditions = () => {
 
     return (
         <div className="flex">
-            <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white p-6 shadow-lg backdrop-blur-lg dark:text-white dark:bg-gray-800">
+            <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white p-6 shadow-sm backdrop-blur-lg dark:text-white dark:bg-gray-800">
                 <CardHeader>
                     <CardTitle className="text-xl font-semibold tracking-wide text-[#c6ffdd]">Diagnosed Conditions</CardTitle>
                 </CardHeader>

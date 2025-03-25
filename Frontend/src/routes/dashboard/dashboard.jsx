@@ -92,7 +92,7 @@ const DashboardPage = () => {
             </div>
 
 
-            <div className="block w-full p-6">
+            <div className="block w-full">
                 <Card className="shadow-xl rounded-2xl border border-gray-300 bg-white">
                     <CardHeader>
                         <div className="flex items-center justify-between">

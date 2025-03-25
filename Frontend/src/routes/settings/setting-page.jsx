@@ -1,33 +1,60 @@
 
 
 const SettingPage = () => {
-
     return (
-        <div className="Flex w-full justify-center items-center pt-10 text-black space-y-5 flex-wrap">
+        <div className="flex flex-col items-center p-10 text-black space-y-5">
+            <h1 className="text-4xl font-semibold dark:text-white">Settings</h1>
 
-            <div className="flex justify-start font-semibold text-4xl">
-                <h1>Settings</h1>
-            </div>
+            {/* Settings Options */}
+            <div className="grid grid-cols-2 gap-6 w-full max-w-4xl">
 
-            <div className="space-x-10 justify-between flex w-full text-center">
-                <div className=" w-full bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200">
+                {/* Account Management */}
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Change Password</a>
                 </div>
-
-                <div className="w-full bg-white p-4 rounded-lg shadow-sm  text-gray-700 font-semibold hover:bg-gray-200">
-                    <a href="">Account</a>
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Edit Profile</a>
                 </div>
 
+                {/* Hospital Management */}
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Manage Hospitals</a>
+                </div>
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Switch Hospital</a>
+                </div>
 
-                <div className="w-full bg-white shadow-sm p-4 rounded-lg  text-gray-700 font-semibold hover:bg-red-500 hover:text-white">
-                    <a href="">Log out</a>
+                {/* System Preferences */}
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Notification Settings</a>
+                </div>
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Theme & Language</a>
+                </div>
+
+                {/* Security */}
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Manage Users</a>
+                </div>
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Activity Logs</a>
+                </div>
+
+                {/* Data Management */}
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Export Data</a>
+                </div>
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                    <a href="">Backup & Restore</a>
+                </div>
+
+                {/* Logout */}
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-red-500 hover:text-white">
+                    <a href="">Log Out</a>
                 </div>
             </div>
         </div>
     );
-
 }
-
-
 
 export default SettingPage;
