@@ -20,12 +20,12 @@ const TopDiagnosedConditions = () => {
 
     return (
         <div className="flex">
-            <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white/10 p-6 shadow-lg backdrop-blur-lg dark:text-white">
+            <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white p-6 shadow-lg backdrop-blur-lg dark:text-white dark:bg-gray-800">
                 <CardHeader>
                     <CardTitle className="text-xl font-semibold tracking-wide text-[#c6ffdd]">Diagnosed Conditions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent max-h-[300px] overflow-y-auto">
+                    <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent max-h-[500px] overflow-y-auto">
                         <ul className="space-y-3">
                             {diagnosedConditions.length > 0 ? (
                                 diagnosedConditions.map((condition, index) => (

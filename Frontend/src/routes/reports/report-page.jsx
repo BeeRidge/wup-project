@@ -5,10 +5,12 @@ import { useTheme } from "@/hooks/use-theme";
 import Swal from "sweetalert2";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { Navigate, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 
 const ReportPage = () => {
     const { theme } = useTheme();
+    const navigate = useNavigate();
 
     const checkupOptions = [
         "All",
@@ -62,6 +64,9 @@ const ReportPage = () => {
     });
 
     const totalPages = Math.ceil(filteredPatients.length / recordsPerPage);
+    const indexOfLastItem = currentPage * recordsPerPage;
+    const indexOfFirstItem = indexOfLastItem - recordsPerPage;
+
 
     const currentRecords = filteredPatients.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage);
 
@@ -212,7 +217,13 @@ const ReportPage = () => {
                                     key={`${patient.ACCRE_NO}-${index}`}
                                     className="hover:bg-gray-100 dark:hover:bg-gray-700"
                                 >
-                                    <td className="border border-gray-300 px-4 py-2">{patient.ACCRE_NO}</td>
+                                    {/* Clickable Accreditation Number */}
+                                    <td
+                                        className="border border-gray-300 px-4 py-2 text-blue-500 cursor-pointer hover:underline"
+                                        onClick={() => navigate(`/member-records/${patient.ACCRE_NO}`)}
+                                    >
+                                        {patient.ACCRE_NO}
+                                    </td>
                                     <td className="border border-gray-300 px-4 py-2">{patient.MDISEASE_DESC}</td>
                                     <td className="border border-gray-300 px-4 py-2">{formatDate(patient.DATE_ADDED)}</td>
                                     <td className="border border-gray-300 px-4 py-2">{patient.PX_TYPE}</td>
@@ -237,29 +248,32 @@ const ReportPage = () => {
             </div>
 
             <div className="flex items-center justify-between pt-4">
-                <button
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                    className={`rounded-lg border px-4 py-2 ${
-                        currentPage === 1 ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-gray-700 text-white hover:bg-gray-600"
-                    }`}
-                >
-                    Previous
-                </button>
+                <p>
+                    Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredPatients.length)} of {filteredPatients.length} entries
+                </p>
+                <div className="flex space-x-2 items-center">
+                    <button
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        className={`rounded-lg border px-4 py-2 ${currentPage === 1 ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-gray-700 text-white hover:bg-gray-600"
+                            }`}
+                    >
+                        Previous
+                    </button>
 
-                <span className="text-gray-800 dark:text-white">
-                    Page {currentPage} of {totalPages}
-                </span>
+                    <span className="text-gray-800 dark:text-white">
+                        Page {currentPage} of {totalPages}
+                    </span>
 
-                <button
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                    className={`rounded-lg border px-4 py-2 ${
-                        currentPage === totalPages ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-gray-700 text-white hover:bg-gray-600"
-                    }`}
-                >
-                    Next
-                </button>
+                    <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        className={`rounded-lg border px-4 py-2 ${currentPage === totalPages ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-gray-700 text-white hover:bg-gray-600"
+                            }`}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
         </div>
     );

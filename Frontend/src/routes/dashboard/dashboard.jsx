@@ -4,13 +4,14 @@ import StatsCard from "./components/StatsTotal";
 import { latestMember, eKonsultaData, diagnosedConditions, consultationTrends, satisfactionData, DashboardDropdown } from "../../constants";
 import { useState, useEffect, useRef } from "react";
 import AuthMessage from "../auth/AuthMessage";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/use-theme";
 import PatientSatisfaction from "./components/PatientSatisfaction";
 import TrancheDataBreakdown from "./components/TrancheDataBreakdown";
 import MonthlyConsultations from "./components/MonthlyConsultations";
 import TopDiagnosedConditions from "./components/TopDiagnosedConditions";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 const DashboardPage = () => {
     const { theme, setTheme } = useTheme();
@@ -22,6 +23,9 @@ const DashboardPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
+    const [entriesPerPage, setEntriesPerPage] = useState(10);
+    const navigate = useNavigate()
+
 
     const fetchNewMembers = async () => {
         try {
@@ -63,6 +67,9 @@ const DashboardPage = () => {
 
     const totalPages = Math.ceil(filteredMembers.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
     const selectedMembers = filteredMembers.slice(startIndex, startIndex + itemsPerPage);
 
     return (
@@ -83,85 +90,110 @@ const DashboardPage = () => {
                 <MonthlyConsultations consultationTrends={consultationTrends} />
                 <TopDiagnosedConditions diagnosedConditions={diagnosedConditions} />
             </div>
-            <div className="block w-full">
-                <Card>
+
+
+            <div className="block w-full p-6">
+                <Card className="shadow-xl rounded-2xl border border-gray-300 bg-white">
                     <CardHeader>
-                        <CardTitle>Latest Members Joined</CardTitle>
-                        <input
-                            type="text"
-                            placeholder="Search members..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full rounded-md border border-green-700 p-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        />
+                        <div className="flex items-center justify-between">
+                            <CardTitle className="text-2xl font-semibold text-gray-900 justify-start">Latest Members Joined</CardTitle>
+                            <div className="flex items-center justify-end mt-2">
+                                <input
+                                    type="text"
+                                    placeholder="Search members..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full rounded-lg border border-gray-400 p-2 text-gray-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+
+                            <select
+                                value={entriesPerPage}
+                                onChange={(e) => setEntriesPerPage(Number(e.target.value))}
+                                className="w-30 rounded-md border border-gray-400 p-2 text-gray-800 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300 block"
+                            >
+                                <option value={5}>Show 5</option>
+                                <option value={10}>Show 10</option>
+                                <option value={20}>Show 20</option>
+                                <option value={50}>Show 50</option>
+                            </select>
+                        </div>
                     </CardHeader>
                     <CardContent>
                         {selectedMembers.length > 0 ? (
-                            <div className="overflow-x-auto">
-                                <table className="w-full border-collapse">
+                            <div className="overflow-x-auto rounded-lg border border-gray-300 shadow-sm items-center">
+                                <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="text-center">
-                                            <th className="px-4 py-2">Accreditation No.</th>
-                                            <th className="px-4 py-2">Member Type</th>
-                                            <th className="px-4 py-2">Last Name</th>
-                                            <th className="px-4 py-2">First Name</th>
-                                            <th className="px-4 py-2">Middle Name</th>
-                                            <th className="px-4 py-2">Ext.</th>
-                                            <th className="px-4 py-2">Sex</th>
-                                            <th className="px-4 py-2">Enlist Date</th>
+                                        <tr className="bg-green-700 text-white font-medium">
+                                            <th className="px-5 py-3">Accreditation No.</th>
+                                            <th className="px-5 py-3">Member Type</th>
+                                            <th className="px-5 py-3">Last Name</th>
+                                            <th className="px-5 py-3">First Name</th>
+                                            <th className="px-5 py-3">Middle Name</th>
+                                            <th className="px-5 py-3">Ext.</th>
+                                            <th className="px-5 py-3">Sex</th>
+                                            <th className="px-5 py-3">Enlist Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {selectedMembers.map((member, index) => (
+                                        {selectedMembers.slice(0, entriesPerPage).map((member, index) => (
                                             <tr
-                                                key={index}
-                                                className="text-center"
+                                                key={`${member.ACCRE_NO}-${index}`}
+                                                className="hover:bg-gray-100 dark:hover:bg-gray-700"
                                             >
-                                                <td className="px-4 py-2">{member.ACCRE_NO}</td>
-                                                <td>
-                                                    {member.PX_TYPE === "MM"
-                                                        ? "MEMBER"
-                                                        : member.PX_TYPE === "DD"
-                                                          ? "DEPENDENT"
-                                                          : member.PX_TYPE === "NM"
-                                                            ? "NON MEMBER"
-                                                            : member.PX_TYPE}
+                                                {/* Clickable Accreditation Number */}
+                                                <td
+                                                    className=" border border-gray-400 px-4 py-2 text-blue-500 cursor-pointer hover:underline"
+                                                    onClick={() => navigate(`/member-records/${member.ACCRE_NO}`)}
+                                                >
+                                                    {member.ACCRE_NO}
                                                 </td>
-                                                <td className="px-4 py-2">{member.PX_LNAME}</td>
-                                                <td className="px-4 py-2">{member.PX_FNAME}</td>
-                                                <td className="px-4 py-2">{member.PX_MNAME}</td>
-                                                <td className="px-4 py-2">{member.PX_EXTNAME}</td>
-                                                <td className="px-4 py-2">{member.PX_SEX}</td>
-                                                <td className="px-4 py-2">{formatDate(member.ENLIST_DATE)}</td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">
+                                                    {member.PX_TYPE === "MM" ? "MEMBER" : member.PX_TYPE === "DD" ? "DEPENDENT" : member.PX_TYPE === "NM" ? "NON MEMBER" : member.PX_TYPE}
+                                                </td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">{member.PX_LNAME}</td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">{member.PX_FNAME}</td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">{member.PX_MNAME || "-"}</td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">{member.PX_EXTNAME || "-"}</td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">{member.PX_SEX}</td>
+                                                <td className="px-5 py-3 border border-gray-400 text-gray-900">{formatDate(member.ENLIST_DATE)}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
                         ) : (
-                            <p className="text-gray-500">No recent members found.</p>
+                            <p className="text-gray-500 text-center py-5">No recent members found.</p>
                         )}
-                        {totalPages > 1 && (
-                            <div className="mt-4 flex items-center justify-center gap-5 text-green-700">
-                                <button
-                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                    disabled={currentPage === 1}
-                                    className="rounded-md border bg-green-700 px-4 py-2 text-white hover:bg-gray-300 disabled:opacity-50"
-                                >
-                                    Previous
-                                </button>
-                                <span>
-                                    Page {currentPage} of {totalPages}
-                                </span>
-                                <button
-                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
-                                    className="rounded-md border bg-green-700 px-4 py-2 text-white hover:bg-gray-300 disabled:opacity-50"
-                                >
-                                    Next
-                                </button>
-                            </div>
-                        )}
+
+                        <div className="mt-4 flex items-center justify-between ">
+
+                            <p>
+                                Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredMembers.length)} of {filteredMembers.length} entries
+                            </p>
+                            {totalPages > 1 && (
+                                <div className="mt-5 flex items-center justify-center gap-4 text-gray-800">
+                                    <button
+                                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                        disabled={currentPage === 1}
+                                        className="rounded-lg border bg-green-700 text-white border-gray-400 px-5 py-2 font-medium transition-all hover:bg-gray-300 disabled:opacity-50"
+                                    >
+                                        Previous
+                                    </button>
+                                    <span className="text-gray-700 text-sm">Page {currentPage} of {totalPages}</span>
+                                    <button
+                                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                        disabled={currentPage === totalPages}
+                                        className="rounded-lg border bg-green-700 text-white border-gray-400 px-5 py-2 font-medium transition-all hover:bg-gray-300 disabled:opacity-50"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
             </div>
