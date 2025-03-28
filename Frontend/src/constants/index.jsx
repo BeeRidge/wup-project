@@ -669,3 +669,12 @@ export const selectedPatient = [
     { pin: "10009", name: "James Anderson" },
     { pin: "10010", name: "Isabella Thomas" },
 ];
+
+
+export const MemberBalance = [
+
+    { name: "Juan Dela Cruz", accreNo: "123456", balance: 1000.00, year: 2024, renewalDate: "Jan 1, 2025" },
+    { name: "Maria Santos", accreNo: "654321", balance: 750.50, year: 2024, renewalDate: "Feb 1, 2025" },
+    { name: "Pedro Pascual", accreNo: "789012", balance: 500.75, year: 2024, renewalDate: "Mar 1, 2025" },
+
+]

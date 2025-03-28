@@ -73,7 +73,7 @@ const DashboardPage = () => {
     const selectedMembers = filteredMembers.slice(startIndex, startIndex + itemsPerPage);
 
     return (
-        <div className="flex w-full flex-wrap gap-6">
+        <div className="flex w-full flex-wrap gap-6 relative">
             <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
             <StatsCard eKonsultaData={eKonsultaData} />
             <div className="flex w-full gap-6">
