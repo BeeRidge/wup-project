@@ -10,17 +10,13 @@ const SecondTranches = () => {
             <table className="w-full min-w-max border-collapse border border-green-700">
                 <thead>
                     <tr className="bg-green-700 text-white">
-                        <th className="border border-gray-300 px-4 py-2">No</th>
-                        <th className="border border-gray-300 px-4 py-2">PIN</th>
-                        <th className="border border-gray-300 px-4 py-2">Last Name</th>
+                        <th className="border border-gray-300 px-4 py-2">Pin Number</th>
+                        <th className="border border-gray-300 px-4 py-2">HSA Number</th>
+                        <th className="border border-gray-300 px-4 py-2">Con Number</th>
                         <th className="border border-gray-300 px-4 py-2">First Name</th>
                         <th className="border border-gray-300 px-4 py-2">Middle Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Suffix</th>
-                        <th className="border border-gray-300 px-4 py-2">Sex</th>
-                        <th className="border border-gray-300 px-4 py-2">Member Type</th>
-                        <th className="border border-gray-300 px-4 py-2">Contact No.</th>
-                        <th className="border border-gray-300 px-4 py-2">Registration Date</th>
-                        <th className="border border-gray-300 px-4 py-2">Effective Period</th>
+                        <th className="border border-gray-300 px-4 py-2">Last Name</th>
+                        <th className="border border-gray-300 px-4 py-2">Consultation Date</th>
                     </tr>
                 </thead>
                 <tbody>

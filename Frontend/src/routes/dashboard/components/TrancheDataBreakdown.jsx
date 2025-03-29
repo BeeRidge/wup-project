@@ -12,13 +12,13 @@ const TrancheDataBreakdown = () => {
         const fetchData = async () => {
             try {
                 const [firstT, secondT] = await Promise.all([
-                    axios.get("http://localhost:8081/api/firstTranche"),
-                    axios.get("http://localhost:8081/api/secondTranche"),
+                    axios.get("http://localhost:8081/api/FirstTranche"),
+                    axios.get("http://localhost:8081/api/SecondTranche"),
                 ]);
 
                 setTrancheData([
-                    { name: "1st Tranche", value: firstT.data.FIRST_TRANCHE || 0 },
-                    { name: "2nd Tranche", value: secondT.data.SECOND_TRANCHE || 0 },
+                    { name: "1st Tranche", value: firstT.data.FirstTranche || 0 },
+                    { name: "2nd Tranche", value: secondT.data.SecondTranche || 0 },
                 ]);
             } catch (error) {
                 console.error("Error fetching tranche data:", error);

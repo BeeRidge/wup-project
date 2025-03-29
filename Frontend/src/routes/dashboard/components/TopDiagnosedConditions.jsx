@@ -8,7 +8,7 @@ const TopDiagnosedConditions = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8081/api/diseaseCount");
+                const response = await axios.get("http://localhost:8081/api/DiseaseCount");
                 setDiagnosedConditions(response.data); // Assuming API returns an array of { name, count }
             } catch (error) {
                 console.error("Error fetching diagnosed conditions:", error);
@@ -20,7 +20,7 @@ const TopDiagnosedConditions = () => {
 
     return (
         <div className="flex">
-            <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white p-6 shadow-sm backdrop-blur-lg dark:text-white dark:bg-gray-800">
+            <Card className="text-gray flex-1 rounded-2xl border border-white/20 bg-white p-6 shadow-sm backdrop-blur-lg dark:bg-gray-800 dark:text-white">
                 <CardHeader>
                     <CardTitle className="text-xl font-semibold tracking-wide text-[#c6ffdd]">Diagnosed Conditions</CardTitle>
                 </CardHeader>
@@ -33,9 +33,9 @@ const TopDiagnosedConditions = () => {
                                         key={index}
                                         className="hover:bg-gray/20 flex items-center justify-between rounded-lg border border-white bg-white px-5 py-3 shadow-md transition-all duration-300 dark:border-white/20 dark:bg-white/10 dark:hover:bg-white/20"
                                     >
-                                        <span className="text-lg font-medium tracking-wide">{condition.MDISEASE_DESC}</span>
+                                        <span className="text-lg font-medium tracking-wide">{condition.AssessmentDiagnosis}</span>
                                         <span className="rounded-lg bg-[#ff6b6b]/10 px-3 py-1 text-xl font-bold text-[#ff6b6b] shadow-md">
-                                            {condition.DISEASE_COUNT} cases
+                                            {condition.DiagnoseDisease} cases
                                         </span>
                                     </li>
                                 ))

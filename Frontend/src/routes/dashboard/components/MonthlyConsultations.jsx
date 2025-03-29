@@ -5,27 +5,53 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Bar } from "recha
 
 const MonthlyConsultations = () => {
     const [consultationTrends, setConsultationTrends] = useState([]);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8081/api/monthlyCheck");
+                const response = await axios.get("http://localhost:8081/api/MonthlyConsultation");
 
-                // Ensure data is properly sorted by year and month for correct display
-                const sortedData = response.data.sort((a, b) => {
-                    if (a.year === b.year) {
-                        return new Date(`1 ${a.month} ${a.year}`) - new Date(`1 ${b.month} ${b.year}`);
-                    }
-                    return a.year - b.year;
+                // Define months in correct order
+                const months = [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                ];
+
+                // Group data by year
+                const groupedData = {};
+                response.data.forEach(({ year, month, TotalRecords }) => {
+                    if (!groupedData[year]) groupedData[year] = {};
+                    groupedData[year][month] = TotalRecords;
                 });
 
-                // Format month in uppercase for display
-                const formattedData = sortedData.map((item) => ({
-                    ...item,
-                    label: `${item.month.toUpperCase()} ${item.year}`, // Example: "AUGUST 2024"
-                }));
+                // Ensure all months exist for each year
+                const filledData = [];
+                Object.keys(groupedData).forEach((year) => {
+                    months.forEach((month) => {
+                        filledData.push({
+                            year: parseInt(year),
+                            month,
+                            label: `${month.toUpperCase()} ${year}`, // Format: "JANUARY 2024"
+                            TotalRecords: groupedData[year][month] || 0, // Default to 0 if missing
+                        });
+                    });
+                });
 
-                setConsultationTrends(formattedData);
+                // Sort by year and month order
+                filledData.sort((a, b) => (a.year === b.year ? months.indexOf(a.month) - months.indexOf(b.month) : a.year - b.year));
+
+                setConsultationTrends(filledData);
             } catch (error) {
                 console.error("Error fetching consultation trends:", error);
             }
@@ -34,10 +60,30 @@ const MonthlyConsultations = () => {
         fetchData();
     }, []);
 
+    // Extract available years from the data
+    const availableYears = [...new Set(consultationTrends.map((item) => item.year))].sort((a, b) => b - a);
+
+    // Filter data to show only the selected year
+    const filteredData = consultationTrends.filter((item) => item.year === selectedYear);
+
     return (
         <Card className="flex-1 dark:bg-gray-800 dark:text-white">
-            <CardHeader>
+            <CardHeader className="flex items-center justify-between">
                 <CardTitle>Total Monthly Consultations</CardTitle>
+                <select
+                    className="rounded-md bg-gray-700 p-2 text-white"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+                >
+                    {availableYears.map((year) => (
+                        <option
+                            key={year}
+                            value={year}
+                        >
+                            {year}
+                        </option>
+                    ))}
+                </select>
             </CardHeader>
             <CardContent>
                 <ResponsiveContainer
@@ -45,21 +91,21 @@ const MonthlyConsultations = () => {
                     height={400}
                 >
                     <BarChart
-                        data={consultationTrends}
-                        margin={{ bottom: 50 }} // Extra space for rotated labels
+                        data={filteredData}
+                        margin={{ bottom: 50 }}
                     >
                         <XAxis
                             dataKey="label"
                             stroke="#888"
-                            interval={0} // Show all labels
-                            tick={{ fontSize: 12 }} // Reduce font size if necessary
-                            angle={-45} // Rotate labels to prevent overlap
-                            textAnchor="end" // Align text correctly
+                            interval={0}
+                            tick={{ fontSize: 12 }}
+                            angle={-45}
+                            textAnchor="end"
                         />
                         <YAxis />
                         <Tooltip formatter={(value) => [`${value} consultations`, "Total"]} />
                         <Bar
-                            dataKey="total_records"
+                            dataKey="TotalRecords"
                             fill="#379777"
                             radius={[5, 5, 0, 0]}
                         />

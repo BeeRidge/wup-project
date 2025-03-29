@@ -58,17 +58,16 @@ const ReportPage = () => {
 
     const filteredPatients = patientData.filter((patient) => {
         return (
-            (selectedCheckup === "All" || patient.MDISEASE_DESC === selectedCheckup) &&
-            (patient.PX_FNAME.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                patient.PX_LNAME.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                patient.ACCRE_NO.includes(searchTerm))
+            (selectedCheckup === "All" || patient.AssessmentDiagnosis === selectedCheckup) &&
+            (patient.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                patient.LastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                patient.PinNumber.includes(searchTerm))
         );
     });
 
     const totalPages = Math.ceil(filteredPatients.length / recordsPerPage);
     const indexOfLastItem = currentPage * recordsPerPage;
     const indexOfFirstItem = indexOfLastItem - recordsPerPage;
-
 
     const currentRecords = filteredPatients.slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage);
 
@@ -121,16 +120,17 @@ const ReportPage = () => {
 
         doc.autoTable({
             startY: 30,
-            head: [["Accre No.", "Disease Type", "Date", "Member Type", "Last Name", "First Name", "Middle Name", "Sex"]],
+            head: [["Pin Number", "Consultaion Number", "Disease Type", "Date", "Member Type", "First Name", "Middle Name", "Last Name", "Suffix"]],
             body: filteredData.map((patient) => [
-                patient.ACCRE_NO,
-                patient.MDISEASE_DESC,
-                formatDate(patient.DATE_ADDED),
-                patient.PX_TYPE,
-                patient.PX_LNAME,
-                patient.PX_FNAME,
-                patient.PX_MNAME,
-                patient.PX_SEX,
+                patient.PinNumber,
+                patient.ConNumber,
+                patient.AssessmentDiagnosis,
+                patient.MemberType,
+                patient.FirstName,
+                patient.MiddleName,
+                patient.LastName,
+                patient.SuffixName,
+                formatDate(patient.ConsultationDate),
             ]),
         });
 
@@ -140,14 +140,15 @@ const ReportPage = () => {
     const exportToExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(
             filteredPatients.map((patient) => ({
-                "Accre No.": patient.ACCRE_NO,
-                "Disease Type": patient.MDISEASE_DESC,
-                Date: formatDate(patient.DATE_ADDED),
-                "Member Type": patient.PX_TYPE,
-                "Last Name": patient.PX_LNAME,
-                "First Name": patient.PX_FNAME,
-                "Middle Name": patient.PX_MNAME,
-                Sex: patient.PX_SEX,
+                "Pin Number": patient.PinNumber,
+                "Consultation Number": patient.ConNumber,
+                "Disease Type": patient.AssessmentDiagnosis,
+                "Member Type": patient.MemberType,
+                "First Name": patient.FirstName,
+                "Middle Name": patient.MiddleName,
+                "Last Name": patient.LastName,
+                Suffix: patient.SuffixName,
+                Date: formatDate(patient.ConsultationDate),
             })),
         );
         const workbook = XLSX.utils.book_new();
@@ -203,37 +204,44 @@ const ReportPage = () => {
                     <table className="w-full border-collapse border border-gray-300 text-left text-gray-800 dark:border-gray-700 dark:text-white">
                         <thead className="bg-gray-200 dark:bg-gray-700">
                             <tr>
-                                <th className="border border-gray-300 px-4 py-2">Accre No.</th>
+                                <th className="border border-gray-300 px-4 py-2">Pin Number</th>
+                                <th className="border border-gray-300 px-4 py-2">Case Number</th>
                                 <th className="border border-gray-300 px-4 py-2">Disease Type</th>
-                                <th className="border border-gray-300 px-4 py-2">Date</th>
                                 <th className="border border-gray-300 px-4 py-2">Member Type</th>
-                                <th className="border border-gray-300 px-4 py-2">Last Name</th>
                                 <th className="border border-gray-300 px-4 py-2">First Name</th>
                                 <th className="border border-gray-300 px-4 py-2">Middle Name</th>
-                                <th className="border border-gray-300 px-4 py-2">Sex</th>
+                                <th className="border border-gray-300 px-4 py-2">Last Name</th>
+                                <th className="border border-gray-300 px-4 py-2">Suffix</th>
+                                <th className="border border-gray-300 px-4 py-2">Date</th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentRecords.length > 0 ? (
                                 currentRecords.map((patient, index) => (
                                     <tr
-                                        key={`${patient.ACCRE_NO}-${index}`}
+                                        key={`${patient.id}-${index}`}
                                         className="hover:bg-gray-100 dark:hover:bg-gray-700"
                                     >
                                         {/* Clickable Accreditation Number */}
                                         <td
-                                            className="border border-gray-300 px-4 py-2 text-blue-500 cursor-pointer hover:underline"
-                                            onClick={() => navigate(`/Membership/MemberRecords/${patient.ACCRE_NO}`)}
+                                            className="cursor-pointer border border-gray-300 px-4 py-2 text-blue-500 hover:underline"
+                                            onClick={() => navigate(`/Membership/MemberRecords/${patient.PinNumber}`)}
                                         >
-                                            {patient.ACCRE_NO}
+                                            {patient.PinNumber}
                                         </td>
-                                        <td className="border border-gray-300 px-4 py-2">{patient.MDISEASE_DESC}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{formatDate(patient.DATE_ADDED)}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{patient.PX_TYPE}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{patient.PX_LNAME}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{patient.PX_FNAME}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{patient.PX_MNAME}</td>
-                                        <td className="border border-gray-300 px-4 py-2">{patient.PX_SEX}</td>
+                                        <td
+                                            className="cursor-pointer border border-gray-300 px-4 py-2 text-blue-500 hover:underline"
+                                            onClick={() => navigate(`/Membership/MemberRecords/${patient.ConNumber}`)}
+                                        >
+                                            {patient.ConNumber}
+                                        </td>
+                                        <td className="border border-gray-300 px-4 py-2">{patient.AssessmentDiagnosis}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{patient.MemberType}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{patient.FirstName}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{patient.MiddleName}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{patient.LastName}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{patient.SuffixName}</td>
+                                        <td className="border border-gray-300 px-4 py-2">{formatDate(patient.ConsultationDate)}</td>
                                     </tr>
                                 ))
                             ) : (
@@ -254,12 +262,13 @@ const ReportPage = () => {
                     <p>
                         Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredPatients.length)} of {filteredPatients.length} entries
                     </p>
-                    <div className="flex space-x-2 items-center">
+                    <div className="flex items-center space-x-2">
                         <button
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(currentPage - 1)}
-                            className={`rounded-lg border px-4 py-2 ${currentPage === 1 ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-green-800 text-white hover:bg-gray-600"
-                                }`}
+                            className={`rounded-lg border px-4 py-2 ${
+                                currentPage === 1 ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-green-800 text-white hover:bg-gray-600"
+                            }`}
                         >
                             Previous
                         </button>
@@ -271,8 +280,11 @@ const ReportPage = () => {
                         <button
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(currentPage + 1)}
-                            className={`rounded-lg border px-4 py-2 ${currentPage === totalPages ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-gray-700 text-white hover:bg-gray-600"
-                                }`}
+                            className={`rounded-lg border px-4 py-2 ${
+                                currentPage === totalPages
+                                    ? "cursor-not-allowed bg-gray-300 text-gray-600"
+                                    : "bg-gray-700 text-white hover:bg-gray-600"
+                            }`}
                         >
                             Next
                         </button>
@@ -280,13 +292,11 @@ const ReportPage = () => {
                 </div>
             </div>
 
-            <div className="bg-white shadow-lg rounded-lg p-6 w-full  mt-5 ">
-                <h1 className="text-2xl font-bold text-gray-900 mb-4 text-start">Member Balance Table</h1>
+            <div className="mt-5 w-full rounded-lg bg-white p-6 shadow-lg">
+                <h1 className="mb-4 text-start text-2xl font-bold text-gray-900">Member Balance Table</h1>
                 <MemberTable members={MemberBalance} />
             </div>
         </div>
-
-
     );
 };
 

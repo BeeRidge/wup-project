@@ -10,12 +10,22 @@ const ConsultationTrends = ({ consultationTrends, diagnosedConditions }) => {
                     <CardTitle>Monthly Consultations Trend</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ResponsiveContainer width="100%" height={400}>
+                    <ResponsiveContainer
+                        width="100%"
+                        height={400}
+                    >
                         <ReBarChart data={consultationTrends}>
-                            <XAxis dataKey="month" stroke="#888" />
+                            <XAxis
+                                dataKey="month"
+                                stroke="#888"
+                            />
                             <YAxis />
                             <Tooltip />
-                            <Bar dataKey="count" fill="#379777" radius={[5, 5, 0, 0]} />
+                            <Bar
+                                dataKey="count"
+                                fill="#379777"
+                                radius={[5, 5, 0, 0]}
+                            />
                         </ReBarChart>
                     </ResponsiveContainer>
                 </CardContent>

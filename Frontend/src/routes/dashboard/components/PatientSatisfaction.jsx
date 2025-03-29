@@ -8,13 +8,14 @@ const PatientSatisfaction = ({ satisfactionData, satisfactionPercentage }) => {
     return (
         <Card className="flex-1 rounded-2xl bg-gradient-to-br p-4 text-black shadow-md dark:from-gray-800 dark:to-gray-800 dark:text-white">
             <CardHeader>
-                <CardTitle className="text-xl font-semibold tracking-wider text-purple-400">
-                    Patient Satisfaction
-                </CardTitle>
+                <CardTitle className="text-xl font-semibold tracking-wider text-purple-400">Patient Satisfaction</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center">
                 {/* Pie Chart */}
-                <PieChart width={180} height={180}>
+                <PieChart
+                    width={180}
+                    height={180}
+                >
                     <Pie
                         data={satisfactionData}
                         dataKey="value"
@@ -28,7 +29,10 @@ const PatientSatisfaction = ({ satisfactionData, satisfactionPercentage }) => {
                         stroke="none"
                     >
                         {satisfactionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                            />
                         ))}
                     </Pie>
                 </PieChart>
@@ -39,9 +43,7 @@ const PatientSatisfaction = ({ satisfactionData, satisfactionPercentage }) => {
                 </span>
 
                 {/* Label */}
-                <span className="mt-1 text-sm uppercase tracking-wide text-gray-400">
-                    Overall Satisfaction Score
-                </span>
+                <span className="mt-1 text-sm uppercase tracking-wide text-gray-400">Overall Satisfaction Score</span>
             </CardContent>
         </Card>
     );

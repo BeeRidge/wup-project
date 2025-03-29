@@ -14,15 +14,15 @@ const StatsCard = () => {
         const fetchData = async () => {
             try {
                 const [totalRes, firstRes, secondRes] = await Promise.all([
-                    axios.get("http://localhost:8081/api/memberCount"),
-                    axios.get("http://localhost:8081/api/firstTranche"),
-                    axios.get("http://localhost:8081/api/secondTranche"),
+                    axios.get("http://localhost:8081/api/MemberCount"),
+                    axios.get("http://localhost:8081/api/FirstTranche"),
+                    axios.get("http://localhost:8081/api/SecondTranche"),
                 ]);
 
                 setMemberData({
-                    totalMembers: totalRes.data.TOTAL_MEMBERS || 0,
-                    firstTranche: firstRes.data.FIRST_TRANCHE || 0,
-                    secondTranche: secondRes.data.SECOND_TRANCHE || 0,
+                    totalMembers: totalRes.data.TotalMembers || 0,
+                    firstTranche: firstRes.data.FirstTranche || 0,
+                    secondTranche: secondRes.data.SecondTranche || 0,
                 });
             } catch (error) {
                 console.error("Error fetching member data:", error);
