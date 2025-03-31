@@ -9,7 +9,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: 'root',
     password: '',
-    database: 'ekonsultaprototype'
+    database: 'prototype'
 });
 db.connect((err) => {
     if (err) {
@@ -114,7 +114,7 @@ app.get('/api/DiseaseCount', (req, res) => {
         COUNT(AssessmentDiagnosis) AS DiagnoseDisease 
         FROM consultation
         GROUP BY AssessmentDiagnosis 
-        ORDER BY DiagnoseDisease;
+        ORDER BY DiagnoseDisease DESC;
     `;  
 
     db.query(sql, (err, data) => {
@@ -138,7 +138,8 @@ app.get('/api/reports', (req, res) => {
             t1.LastName,
             t1.SuffixName
             FROM consultation AS t2, member AS t1
-            WHERE t2.PinNumber = t1.PinNumber;
+            WHERE t2.PinNumber = t1.PinNumber
+            ORDER BY t2.ConsultationDate DESC;
     `;  
     db.query(sql, (err, data) => {
         if (err) return res.status(500).json({ error: err.message });

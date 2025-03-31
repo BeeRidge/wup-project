@@ -25,7 +25,7 @@ const TopDiagnosedConditions = () => {
                     <CardTitle className="text-xl font-semibold tracking-wide text-[#c6ffdd]">Diagnosed Conditions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent max-h-[500px] overflow-y-auto">
+                    <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent max-h-[400px] w-[320px] overflow-y-auto">
                         <ul className="space-y-3">
                             {diagnosedConditions.length > 0 ? (
                                 diagnosedConditions.map((condition, index) => (
