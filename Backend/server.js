@@ -52,6 +52,36 @@ app.get('/api/member', (req, res) => {
         return res.json(data);
     });
 });
+app.get('/api/fstranche', (req, res) => {
+    const sql = `
+        SELECT * 
+        FROM member AS m
+        LEFT JOIN healthassessment AS h ON m.PinNumber = h.PinNumber
+        WHERE m.PinNumber = h.PinNumber
+        ORDER BY h.AssessmentDate DESC`;
+
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+
+app.get('/api/sndTranche', (req, res) => {
+    const sql = `
+        SELECT * 
+        FROM member AS m
+        LEFT JOIN consultation AS c ON m.PinNumber = c.PinNumber
+        LEFT JOIN healthassessment AS h ON m.PinNumber = h.PinNumber
+        WHERE m.PinNumber = c.PinNumber
+        ORDER BY c.ConsultationDate DESC`;
+
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
+});
+
+
 /* ------------------------------------------------------------------------------------------------------------- */
 // Counting Total Stats
 app.get('/api/MemberCount', (req, res) => {

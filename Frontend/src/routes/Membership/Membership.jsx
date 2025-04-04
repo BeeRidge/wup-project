@@ -19,11 +19,7 @@ const Membership = ({ membershipData }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedTranche, setSelectedTranche] = useState("Latest Member");
 
-    const filteredUsers = (membershipData || []).filter(member => member.batch === selectedTranche);
-
-
-
-
+    const filteredUsers = (membershipData || []).filter((member) => member.batch === selectedTranche);
 
     const renderBatchTranche = () => {
         switch (selectedTranche) {
@@ -32,13 +28,9 @@ const Membership = ({ membershipData }) => {
             case "2nd":
                 return <SecondTranches membershipData={filteredUsers} />;
             case "3rd":
-                return <Batch3 membershipData={filteredUsers} />;
-            default:
-                return <Tranche1 membershipData={filteredUsers} />
-
+                return <LatestMember membershipData={filteredUsers} />;
         }
-    }
-
+    };
 
     // Apply search filter
     const searchedData = filteredUsers.filter((member) =>
@@ -124,7 +116,7 @@ const Membership = ({ membershipData }) => {
                     <button
                         className={`p-2 px-4 ${selectedTranche === "Latest Member" ? "border-b-2 border-green-700 text-green-700" : ""}`}
                         onClick={() => {
-                            setSelectedTranche("Latest Member")
+                            setSelectedTranche("Latest Member");
                             setCurrentPage(1);
                         }}
                     >
@@ -133,7 +125,7 @@ const Membership = ({ membershipData }) => {
                     <button
                         className={`p-2 px-4 ${selectedTranche === "First Tranche" ? "border-b-2 border-green-700 text-green-700" : ""}`}
                         onClick={() => {
-                            setSelectedTranche("First Tranche")
+                            setSelectedTranche("First Tranche");
                             setCurrentPage(1);
                         }}
                     >
@@ -142,7 +134,7 @@ const Membership = ({ membershipData }) => {
                     <button
                         className={`p-2 px-4 ${selectedTranche === "Second Tranche" ? "border-b-2 border-green-700 text-green-700" : ""}`}
                         onClick={() => {
-                            setSelectedTranche("Second Tranche")
+                            setSelectedTranche("Second Tranche");
                             setCurrentPage(1);
                         }}
                     >
@@ -293,8 +285,9 @@ const Membership = ({ membershipData }) => {
                         {currentPage} / {totalPages}
                     </span>
                     <button
-                        className={`rounded-md border p-2 ${currentPage === totalPages ? "cursor-not-allowed bg-gray-300" : "bg-green-700 text-white"
-                            }`}
+                        className={`rounded-md border p-2 ${
+                            currentPage === totalPages ? "cursor-not-allowed bg-gray-300" : "bg-green-700 text-white"
+                        }`}
                         onClick={() => setCurrentPage(currentPage + 1)}
                         disabled={currentPage === totalPages}
                     >
