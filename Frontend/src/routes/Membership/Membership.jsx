@@ -15,7 +15,7 @@ const Membership = () => {
 
     // Fetch data from the API on component mount
     useEffect(() => {
-        fetch("/api/member")
+        fetch("http://localhost:8081/api/member")
             .then((response) => response.json())
             .then((data) => setMembershipData(data))
             .catch((error) => console.error("Error fetching data:", error));
