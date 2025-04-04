@@ -150,6 +150,8 @@ const Membership = ({ membershipData }) => {
                     </button>
                 </div>
 
+                {renderBatchTranche()}
+
                 {/* Export button on the right */}
                 <div className="ml-auto">
                     <button
