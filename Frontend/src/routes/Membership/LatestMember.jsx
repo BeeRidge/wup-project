@@ -1,32 +1,61 @@
-// LatestMember.js
-const LatestMember = ({ membershipData }) => {
+import { useEffect, useState } from "react";
+
+const LatestMember = () => {
+    const [membershipData, setMembershipData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("http://localhost:8081/api/member");
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                const data = await response.json();
+                setMembershipData(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div>
-            <h2>Latest Members</h2>
-            <table>
+            <table border="1">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>PIN</th>
-                        <th>Last Name</th>
+                        <th>PIN No.</th>
+                        <th>Member Type</th>
                         <th>First Name</th>
-                        {/* Add other columns */}
+                        <th>Middle Name</th>
+                        <th>Last Name</th>
+                        <th>Suffix</th>
+                        <th>Sex</th>
+                        <th>Contact No.</th>
+                        <th>Registration Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     {membershipData.length > 0 ? (
-                        membershipData.map((Member, index) => (
+                        membershipData.map((member, index) => (
                             <tr key={index}>
-                                <td>{Member.id}</td>
-                                <td>{Member.Pin}</td>
-                                <td>{Member.LastName}</td>
-                                <td>{Member.FirstName}</td>
-                                {/* Add other columns */}
+                                <td>{index + 1}</td>
+                                <td>{member.PinNumber}</td>
+                                <td>{member.MemberType}</td>
+                                <td>{member.FirstName}</td>
+                                <td>{member.MiddleName}</td>
+                                <td>{member.LastName}</td>
+                                <td>{member.SuffixName}</td>
+                                <td>{member.Sex}</td>
+                                <td>{member.MobileNumber}</td>
+                                <td>{member.RegistrationDate}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="11">No results found.</td>
+                            <td colSpan="4">No results found.</td>
                         </tr>
                     )}
                 </tbody>

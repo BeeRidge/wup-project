@@ -12,7 +12,6 @@ const SecondTranches = () => {
 
     return (
         <div>
-            <h2>2nd Tranche Members</h2>
             <table border="1">
                 <thead>
                     <tr>
