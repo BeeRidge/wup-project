@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-const db = mysql.createConnection({  
+const db = mysql.createConnection({
     host: "localhost",
     user: 'root',
     password: '',
@@ -25,17 +25,17 @@ app.get('/', (req, res) => {
 // Login API
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    
+
     if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
     }
-    
+
     const sql = "SELECT * FROM admin WHERE Username = ? AND Password = ?";
     db.query(sql, [username, password], (err, result) => {
         if (err) {
             return res.status(500).json({ message: "Server error" });
         }
-        
+
         if (result.length > 0) {
             return res.json({ status: "success", message: "Login successful" });
         } else {
@@ -93,7 +93,7 @@ app.get('/api/SecondTranche', (req, res) => {
 /* ----------------------------------------------------------------------------------------------------------- */
 // Count the patient for each month
 app.get('/api/MonthlyConsultation', (req, res) => {
-    const sql =`
+    const sql = `
                 SELECT YEAR(ConsultationDate) AS year, 
                 MONTHNAME(ConsultationDate) AS month, 
                 COUNT(*) AS TotalRecords
@@ -115,7 +115,7 @@ app.get('/api/DiseaseCount', (req, res) => {
         FROM consultation
         GROUP BY AssessmentDiagnosis 
         ORDER BY DiagnoseDisease DESC;
-    `;  
+    `;
 
     db.query(sql, (err, data) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -140,7 +140,7 @@ app.get('/api/reports', (req, res) => {
             FROM consultation AS t2, member AS t1
             WHERE t2.PinNumber = t1.PinNumber
             ORDER BY t2.ConsultationDate DESC;
-    `;  
+    `;
     db.query(sql, (err, data) => {
         if (err) return res.status(500).json({ error: err.message });
         return res.json(data);

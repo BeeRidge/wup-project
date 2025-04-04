@@ -1,10 +1,18 @@
-// FirstTranches.js
-
-const FirstTranches = ({ membershipData }) => {
+// LatestMember.js
+const LatestMember = ({ membershipData }) => {
     return (
         <div>
-            <h2>1st Tranche Members</h2>
+            <h2>Latest Members</h2>
             <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>PIN</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        {/* Add other columns */}
+                    </tr>
+                </thead>
                 <tbody>
                     {membershipData.length > 0 ? (
                         membershipData.map((Member, index) => (
@@ -27,4 +35,4 @@ const FirstTranches = ({ membershipData }) => {
     );
 };
 
-export default FirstTranches;
+export default LatestMember;

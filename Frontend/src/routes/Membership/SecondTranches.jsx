@@ -1,43 +1,34 @@
-import { useTheme } from "@/hooks/use-theme";
-import { Footer } from "@/layouts/footer";
-import { membershipData } from "../../constants";
-
-const SecondTranches = () => {
-    const { theme } = useTheme();
-
+// SecondTranches.js
+const SecondTranches = ({ membershipData }) => {
     return (
-        <div className="overflow-x-auto">
-            <table className="w-full min-w-max border-collapse border border-green-700">
+        <div>
+            <h2>2nd Tranche Members</h2>
+            <table>
                 <thead>
-                    <tr className="bg-green-700 text-white">
-                        <th className="border border-gray-300 px-4 py-2">Pin Number</th>
-                        <th className="border border-gray-300 px-4 py-2">HSA Number</th>
-                        <th className="border border-gray-300 px-4 py-2">Con Number</th>
-                        <th className="border border-gray-300 px-4 py-2">First Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Middle Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Last Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Consultation Date</th>
+                    <tr>
+                        <th>No</th>
+                        <th>PIN</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        {/* Add other columns */}
                     </tr>
                 </thead>
                 <tbody>
-                    {membershipData.map((Member, index) => (
-                        <tr
-                            key={index}
-                            className="hover:bg-gray-100"
-                        >
-                            <td className="border border-gray-300 px-4 py-2">{Member.id}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.Pin}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.LastName}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.FirstName}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.MiddleName}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.Suffix}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.Sex}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.MemberType}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.ContactNo}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.RegistrationDate}</td>
-                            <td className="border border-gray-300 px-4 py-2">{Member.EffectivePeriod}</td>
+                    {membershipData.length > 0 ? (
+                        membershipData.map((Member, index) => (
+                            <tr key={index}>
+                                <td>{Member.id}</td>
+                                <td>{Member.Pin}</td>
+                                <td>{Member.LastName}</td>
+                                <td>{Member.FirstName}</td>
+                                {/* Add other columns */}
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="11">No results found.</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>

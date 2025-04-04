@@ -1,29 +1,47 @@
 import { useState } from "react";
-import { membershipData } from "../../constants";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { FaDownload } from "react-icons/fa";
+
 // Your data source
 
-const Membership = () => {
+const Membership = ({ membershipData }) => {
+    /*  console.log(membershipData)
+     if (!membershipData) {
+         console.error("membershipData is undefined");
+     } */
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5); // Default entries per page
-    const [activeTab, setActiveTab] = useState("firstTranche"); // Default tab
+    /*  const [activeTab, setActiveTab] = useState("firstTranche"); // Default tab */
     const [showModal, setShowModal] = useState(false);
+    const [selectedTranche, setSelectedTranche] = useState("Latest Member");
 
-    // Filter data based on the selected tab
-    const filteredData = membershipData.filter((member) => {
-        if (activeTab === "latestMember") return member.batch === "Latest Member";
-        if (activeTab === "firstTranche") return member.batch === "First Tranche";
-        if (activeTab === "secondTranche") return member.batch === "Second Tranche";
-        return true;
-    });
+    const filteredUsers = (membershipData || []).filter(member => member.batch === selectedTranche);
+
+
+
+
+
+    const renderBatchTranche = () => {
+        switch (selectedTranche) {
+            case "1st":
+                return <FirstTranches membershipData={filteredUsers} />;
+            case "2nd":
+                return <SecondTranches membershipData={filteredUsers} />;
+            case "3rd":
+                return <Batch3 membershipData={filteredUsers} />;
+            default:
+                return <Tranche1 membershipData={filteredUsers} />
+
+        }
+    }
+
 
     // Apply search filter
-    const searchedData = filteredData.filter((member) =>
+    const searchedData = filteredUsers.filter((member) =>
         Object.values(member).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())),
     );
 
@@ -95,7 +113,6 @@ const Membership = () => {
     // Pagination Logic
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = searchedData.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(searchedData.length / itemsPerPage);
 
     return (
@@ -105,27 +122,27 @@ const Membership = () => {
                 {/* Tabs on the left */}
                 <div className="flex space-x-4">
                     <button
-                        className={`p-2 px-4 ${activeTab === "latestMember" ? "border-b-2 border-green-700 text-green-700" : ""}`}
+                        className={`p-2 px-4 ${selectedTranche === "Latest Member" ? "border-b-2 border-green-700 text-green-700" : ""}`}
                         onClick={() => {
-                            setActiveTab("latestMember");
+                            setSelectedTranche("Latest Member")
                             setCurrentPage(1);
                         }}
                     >
                         Latest Member
                     </button>
                     <button
-                        className={`p-2 px-4 ${activeTab === "firstTranche" ? "border-b-2 border-green-700 text-green-700" : ""}`}
+                        className={`p-2 px-4 ${selectedTranche === "First Tranche" ? "border-b-2 border-green-700 text-green-700" : ""}`}
                         onClick={() => {
-                            setActiveTab("firstTranche");
+                            setSelectedTranche("First Tranche")
                             setCurrentPage(1);
                         }}
                     >
                         First Tranche
                     </button>
                     <button
-                        className={`p-2 px-4 ${activeTab === "secondTranche" ? "border-b-2 border-green-700 text-green-700" : ""}`}
+                        className={`p-2 px-4 ${selectedTranche === "Second Tranche" ? "border-b-2 border-green-700 text-green-700" : ""}`}
                         onClick={() => {
-                            setActiveTab("secondTranche");
+                            setSelectedTranche("Second Tranche")
                             setCurrentPage(1);
                         }}
                     >
@@ -223,8 +240,8 @@ const Membership = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.length > 0 ? (
-                            currentItems.map((Member, index) => (
+                        {filteredUsers.length > 0 ? (
+                            filteredUsers.map((Member, index) => (
                                 <tr
                                     key={index}
                                     className="hover:bg-gray-100"
@@ -274,9 +291,8 @@ const Membership = () => {
                         {currentPage} / {totalPages}
                     </span>
                     <button
-                        className={`rounded-md border p-2 ${
-                            currentPage === totalPages ? "cursor-not-allowed bg-gray-300" : "bg-green-700 text-white"
-                        }`}
+                        className={`rounded-md border p-2 ${currentPage === totalPages ? "cursor-not-allowed bg-gray-300" : "bg-green-700 text-white"
+                            }`}
                         onClick={() => setCurrentPage(currentPage + 1)}
                         disabled={currentPage === totalPages}
                     >
