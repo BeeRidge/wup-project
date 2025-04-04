@@ -4,7 +4,7 @@ const FirstTranches = () => {
     const [membershipData, setMembershipData] = useState([]);
 
     useEffect(() => {
-        fetch("/api/fstranche")
+        fetch("http://localhost:8081/api/fstranche")
             .then((response) => response.json())
             .then((data) => setMembershipData(data))
             .catch((error) => console.error("Error fetching data:", error));
