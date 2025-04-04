@@ -45,6 +45,8 @@ const FirstTranches = () => {
             </table>
         </div>
     );
+
+
 };
 
 export default FirstTranches;
