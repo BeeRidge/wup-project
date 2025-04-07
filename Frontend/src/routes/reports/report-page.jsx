@@ -9,6 +9,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 import MemberTable from "./components/MemberTable";
 import { MemberBalance } from "../../constants";
+import MemberModal from "./components/MemberModal";
+import ConsultationNumber from "./components/ConsultationModal";
 
 const ReportPage = () => {
     const { theme } = useTheme();
@@ -43,6 +45,41 @@ const ReportPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const recordsPerPage = 10;
+
+
+    /* Pin Number */
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPinNumber, setSelectedPinNumber] = useState(null);
+    const openModal = (patient) => {
+        setSelectedPinNumber(patient);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedPinNumber(null);
+    };
+    /* end */
+
+    /* health */
+    /* Consultation Modal */
+    const [isModalOpenConsultation, setIsModalOpenConsultation] = useState(false);
+    const [selectedConsultation, setSelectedConsultation] = useState(null);
+
+    const openModalConsultation = (patient) => {
+        setSelectedConsultation(patient);
+        setIsModalOpenConsultation(true);
+    };
+
+    const closeModalConsultation = () => {
+        setIsModalOpenConsultation(false);
+        setSelectedConsultation(null);
+    };
+
+
+
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -225,13 +262,13 @@ const ReportPage = () => {
                                         {/* Clickable Accreditation Number */}
                                         <td
                                             className="cursor-pointer border border-gray-300 px-4 py-2 text-blue-500 hover:underline"
-                                            onClick={() => navigate(`/Membership/MemberRecords/${patient.PinNumber}`)}
+                                            onClick={() => openModal(patient)}
                                         >
                                             {patient.PinNumber}
                                         </td>
                                         <td
                                             className="cursor-pointer border border-gray-300 px-4 py-2 text-blue-500 hover:underline"
-                                            onClick={() => navigate(`/Membership/MemberRecords/${patient.ConNumber}`)}
+                                            onClick={() => openModalConsultation(patient)}
                                         >
                                             {patient.ConNumber}
                                         </td>
@@ -258,6 +295,21 @@ const ReportPage = () => {
                     </table>
                 </div>
 
+                <MemberModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    pinNumber={selectedPinNumber}
+                />
+
+                <ConsultationNumber
+                    isOpen={isModalOpenConsultation}
+                    onClose={closeModalConsultation}
+                    consultationNumber={selectedConsultation}
+                />
+
+
+                {/* Pagination */}
+
                 <div className="flex items-center justify-between pt-4">
                     <p>
                         Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredPatients.length)} of {filteredPatients.length} entries
@@ -266,9 +318,8 @@ const ReportPage = () => {
                         <button
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage(currentPage - 1)}
-                            className={`rounded-lg border px-4 py-2 ${
-                                currentPage === 1 ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-green-800 text-white hover:bg-gray-600"
-                            }`}
+                            className={`rounded-lg border px-4 py-2 ${currentPage === 1 ? "cursor-not-allowed bg-gray-300 text-gray-600" : "bg-green-800 text-white hover:bg-gray-600"
+                                }`}
                         >
                             Previous
                         </button>
@@ -280,11 +331,10 @@ const ReportPage = () => {
                         <button
                             disabled={currentPage === totalPages}
                             onClick={() => setCurrentPage(currentPage + 1)}
-                            className={`rounded-lg border px-4 py-2 ${
-                                currentPage === totalPages
-                                    ? "cursor-not-allowed bg-gray-300 text-gray-600"
-                                    : "bg-gray-700 text-white hover:bg-gray-600"
-                            }`}
+                            className={`rounded-lg border px-4 py-2 ${currentPage === totalPages
+                                ? "cursor-not-allowed bg-gray-300 text-gray-600"
+                                : "bg-gray-700 text-white hover:bg-gray-600"
+                                }`}
                         >
                             Next
                         </button>
