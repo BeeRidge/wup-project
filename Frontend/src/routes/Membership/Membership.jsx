@@ -8,28 +8,53 @@ import LatestMember from "./LatestMember";
 import FirstTranches from "./FirstTranches";
 import SecondTranches from "./SecondTranches";
 
+
 const Membership = () => {
-    const [membershipData, setMembershipData] = useState([]);
+    const [membershipData, setMembershipData] = useState([]); // For Latest Member
+    const [firstTrancheData, setFirstTrancheData] = useState([]); // For First Tranche
+    const [secondTrancheData, setSecondTrancheData] = useState([]); // For Second Tranche
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
-    const [selectedTranche, setSelectedTranche] = useState("Member");
-    const [showModal, setShowModal] = useState(false);
+    const [selectedTranche, setSelectedTranche] = useState("member");
 
-    // Fetch data from the API on component mount
+    // Fetch Latest Member data
     useEffect(() => {
         fetch("http://localhost:8081/api/member")
             .then((response) => response.json())
             .then((data) => setMembershipData(data))
-            .catch((error) => console.error("Error fetching data:", error));
+            .catch((error) => console.error("Error fetching Latest Member data:", error));
+    }, []);
+
+    // Fetch First Tranche data
+    useEffect(() => {
+        fetch("http://localhost:8081/api/fstranche")
+            .then((response) => response.json())
+            .then((data) => setFirstTrancheData(data))
+            .catch((error) => console.error("Error fetching First Tranche data:", error));
+    }, []);
+
+    // Fetch Second Tranche data
+    useEffect(() => {
+        fetch("http://localhost:8081/api/sndTranche")
+            .then((response) => response.json())
+            .then((data) => setSecondTrancheData(data))
+            .catch((error) => console.error("Error fetching Second Tranche data:", error));
     }, []);
 
     // Filter data based on the selected tranche
-    const filteredUsers = membershipData.filter((member) => member.batch === selectedTranche);
+    const filteredUsers =
+        selectedTranche === "First Tranche"
+            ? firstTrancheData
+            : selectedTranche === "Second Tranche"
+                ? secondTrancheData
+                : membershipData;
 
     // Search functionality
     const searchedData = filteredUsers.filter((member) =>
-        Object.values(member).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase()))
+        Object.values(member).some((value) =>
+            String(value).toLowerCase().includes(searchTerm.toLowerCase())
+        )
     );
 
     // Pagination Logic
@@ -42,11 +67,13 @@ const Membership = () => {
     const renderBatchTranche = () => {
         switch (selectedTranche) {
             case "First Tranche":
-                return <FirstTranches membershipData={searchedData} />;
+                return <FirstTranches membershipData={currentItems} />;
             case "Second Tranche":
-                return <SecondTranches membershipData={searchedData} />;
+                return <SecondTranches membershipData={currentItems} />;
             case "member":
-                return <LatestMember membershipData={searchedData} />;
+                return <LatestMember membershipData={currentItems} />;
+            default:
+                return <LatestMember membershipData={currentItems} />;
         }
     };
 
@@ -83,19 +110,6 @@ const Membership = () => {
                 </button>
             </div>
 
-            {/* Render the appropriate batch component based on selected tranche */}
-            {renderBatchTranche()}
-
-            {/* Export button */}
-            <div className="ml-auto">
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="rounded-full bg-gray-200 p-2 transition hover:bg-gray-300"
-                >
-                    <FaDownload className="text-xl text-gray-700" />
-                </button>
-            </div>
-
             {/* Search and Items Per Page Dropdown */}
             <div className="mb-4 flex items-center justify-between">
                 <select
@@ -121,56 +135,14 @@ const Membership = () => {
                 />
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-green-700">
-                    <thead>
-                        <tr className="bg-green-700 text-white">
-                            <th className="px-4 py-2">No</th>
-                            <th className="px-4 py-2">PIN No.</th>
-                            <th className="px-4 py-2">Member Type</th>
-                            <th className="px-4 py-2">Last Name</th>
-                            <th className="px-4 py-2">First Name</th>
-                            <th className="px-4 py-2">Middle Name</th>
-                            <th className="px-4 py-2">Suffix</th>
-                            <th className="px-4 py-2">Sex</th>
-                            <th className="px-4 py-2">Contact No.</th>
-                            <th className="px-4 py-2">Registration Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentItems.length > 0 ? (
-                            currentItems.map((member, index) => (
-                                <tr key={index} className="hover:bg-gray-100">
-                                    <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
-                                    <td className="px-4 py-2">{member.PinNumber}</td>
-                                    <td className="px-4 py-2">{member.MemberType}</td>
-                                    <td className="px-4 py-2">{member.LastName}</td>
-                                    <td className="px-4 py-2">{member.FirstName}</td>
-                                    <td className="px-4 py-2">{member.MiddleName}</td>
-                                    <td className="px-4 py-2">{member.SuffixName}</td>
-                                    <td className="px-4 py-2">{member.Sex}</td>
-                                    <td className="px-4 py-2">{member.ContactNumber}</td>
-                                    <td className="px-4 py-2">{member.RegistrationDate}</td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="10" className="py-4 text-center text-gray-500">
-                                    No results found.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+            {/* Render the appropriate batch component */}
+            {renderBatchTranche()}
 
             {/* Pagination */}
             <div className="mt-4 flex items-center justify-between">
                 <p>
                     Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, searchedData.length)} of {searchedData.length} entries
                 </p>
-
                 <div className="flex space-x-2">
                     <button
                         className={`rounded-md border p-2 ${currentPage === 1 ? "cursor-not-allowed bg-gray-300" : "bg-green-700 text-white"}`}

@@ -1,61 +1,44 @@
 import { useEffect, useState } from "react";
 
-const LatestMember = () => {
-    const [membershipData, setMembershipData] = useState([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("http://localhost:8081/api/member");
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await response.json();
-                setMembershipData(data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
+const LatestMember = ({ membershipData }) => {
     return (
-        <div>
-            <table border="1">
+        <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-green-700">
                 <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>PIN No.</th>
-                        <th>Member Type</th>
-                        <th>First Name</th>
-                        <th>Middle Name</th>
-                        <th>Last Name</th>
-                        <th>Suffix</th>
-                        <th>Sex</th>
-                        <th>Contact No.</th>
-                        <th>Registration Date</th>
+                    <tr className="bg-green-700 text-white">
+                        <th className="px-4 py-2">No</th>
+                        <th className="px-4 py-2">PIN No.</th>
+                        <th className="px-4 py-2">Member Type</th>
+                        <th className="px-4 py-2">Last Name</th>
+                        <th className="px-4 py-2">First Name</th>
+                        <th className="px-4 py-2">Middle Name</th>
+                        <th className="px-4 py-2">Suffix</th>
+                        <th className="px-4 py-2">Sex</th>
+                        <th className="px-4 py-2">Contact No.</th>
+                        <th className="px-4 py-2">Registration Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     {membershipData.length > 0 ? (
                         membershipData.map((member, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{member.PinNumber}</td>
-                                <td>{member.MemberType}</td>
-                                <td>{member.FirstName}</td>
-                                <td>{member.MiddleName}</td>
-                                <td>{member.LastName}</td>
-                                <td>{member.SuffixName}</td>
-                                <td>{member.Sex}</td>
-                                <td>{member.MobileNumber}</td>
-                                <td>{member.RegistrationDate}</td>
+                            <tr key={index} className="hover:bg-gray-100">
+                                <td className="px-4 py-2">{index + 1}</td>
+                                <td className="px-4 py-2">{member.PinNumber}</td>
+                                <td className="px-4 py-2">{member.MemberType}</td>
+                                <td className="px-4 py-2">{member.LastName}</td>
+                                <td className="px-4 py-2">{member.FirstName}</td>
+                                <td className="px-4 py-2">{member.MiddleName}</td>
+                                <td className="px-4 py-2">{member.SuffixName}</td>
+                                <td className="px-4 py-2">{member.Sex}</td>
+                                <td className="px-4 py-2">{member.ContactNumber}</td>
+                                <td className="px-4 py-2">{member.RegistrationDate}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="4">No results found.</td>
+                            <td colSpan="10" className="py-4 text-center text-gray-500">
+                                No results found.
+                            </td>
                         </tr>
                     )}
                 </tbody>

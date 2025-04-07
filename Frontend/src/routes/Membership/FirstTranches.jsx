@@ -1,52 +1,63 @@
 import { useState, useEffect } from "react";
 
-const FirstTranches = () => {
-    const [membershipData, setMembershipData] = useState([]);
 
+/* 
     useEffect(() => {
         fetch("http://localhost:8081/api/fstranche")
             .then((response) => response.json())
             .then((data) => setMembershipData(data))
             .catch((error) => console.error("Error fetching data:", error));
-    }, []);
+    }, []); */
 
+const FirstTranches = ({ membershipData }) => {
     return (
-        <div>
-            <table border="1">
+        <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-green-700">
                 <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Pin No.</th>
-                        <th>Health Asssessment No.</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Assessment Date</th>
-                        {/* Add other columns as needed */}
+                    <tr className="bg-green-700 text-white">
+                        <th className="px-4 py-2">No</th>
+                        <th className="px-4 py-2">PIN No.</th>
+                        <th className="px-4 py-2">Health Assesment No.</th>
+                        <th className="px-4 py-2">Member Type</th>
+                        <th className="px-4 py-2">Last Name</th>
+                        <th className="px-4 py-2">First Name</th>
+                        <th className="px-4 py-2">Middle Name</th>
+                        <th className="px-4 py-2">Suffix</th>
+                        <th className="px-4 py-2">Sex</th>
+                        <th className="px-4 py-2">Contact No.</th>
+                        <th className="px-4 py-2">Registration Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     {membershipData.length > 0 ? (
                         membershipData.map((member, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td> {/* Sequential numbering */}
-                                <td>{member.PinNumber}</td>
-                                <td>{member.HSANumber}</td>
-                                <td>{member.LastName}</td>
-                                <td>{member.FirstName}</td>
-                                <td>{member.AssessmentDate}</td>
+                            <tr key={index} className="hover:bg-gray-100">
+                                <td className="px-4 py-2">{index + 1}</td>
+                                <td className="px-4 py-2">{member.PinNumber}</td>
+                                <td className="px-4 py-2">{member.HSANumber}</td>
+                                <td className="px-4 py-2">{member.MemberType}</td>
+                                <td className="px-4 py-2">{member.LastName}</td>
+                                <td className="px-4 py-2">{member.FirstName}</td>
+                                <td className="px-4 py-2">{member.MiddleName}</td>
+                                <td className="px-4 py-2">{member.SuffixName}</td>
+                                <td className="px-4 py-2">{member.Sex}</td>
+                                <td className="px-4 py-2">{member.ContactNumber}</td>
+                                <td className="px-4 py-2">{member.RegistrationDate}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5">No results found.</td>
+                            <td colSpan="10" className="py-4 text-center text-gray-500">
+                                No results found.
+                            </td>
                         </tr>
                     )}
                 </tbody>
             </table>
         </div>
+
     );
-
-
 };
+
 
 export default FirstTranches;
