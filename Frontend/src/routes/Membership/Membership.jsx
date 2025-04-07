@@ -8,7 +8,6 @@ import LatestMember from "./LatestMember";
 import FirstTranches from "./FirstTranches";
 import SecondTranches from "./SecondTranches";
 
-
 const Membership = () => {
     const [membershipData, setMembershipData] = useState([]); // For Latest Member
     const [firstTrancheData, setFirstTrancheData] = useState([]); // For First Tranche
@@ -44,17 +43,11 @@ const Membership = () => {
 
     // Filter data based on the selected tranche
     const filteredUsers =
-        selectedTranche === "First Tranche"
-            ? firstTrancheData
-            : selectedTranche === "Second Tranche"
-                ? secondTrancheData
-                : membershipData;
+        selectedTranche === "First Tranche" ? firstTrancheData : selectedTranche === "Second Tranche" ? secondTrancheData : membershipData;
 
     // Search functionality
     const searchedData = filteredUsers.filter((member) =>
-        Object.values(member).some((value) =>
-            String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        Object.values(member).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())),
     );
 
     // Pagination Logic
