@@ -14,10 +14,7 @@ const LatestMember = ({ membershipData }) => {
                         <th className="border border-gray-300 px-4 py-2">No</th>
                         <th className="border border-gray-300 px-4 py-2">PIN No.</th>
                         <th className="border border-gray-300 px-4 py-2">Member Type</th>
-                        <th className="border border-gray-300 px-4 py-2">First Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Middle Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Last Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Suffix</th>
+                        <th className="border border-gray-300 px-4 py-2">Full Name</th>
                         <th className="border border-gray-300 px-4 py-2">Sex</th>
                         <th className="border border-gray-300 px-4 py-2">Contact No.</th>
                         <th className="border border-gray-300 px-4 py-2">Registration Date</th>
@@ -33,10 +30,9 @@ const LatestMember = ({ membershipData }) => {
                                 <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.PinNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.MemberType}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.FirstName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.MiddleName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.LastName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.SuffixName}</td>
+                                <td className="border border-gray-300 px-4 py-2">
+                                    {`${member.FirstName} ${member.MiddleName ? member.MiddleName.charAt(0) + "." : ""} ${member.LastName} ${member.SuffixName || ""}`.trim()}
+                                </td>
                                 <td className="border border-gray-300 px-4 py-2">{member.Sex}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.ContactNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{formatDate(member.RegistrationDate)}</td>
@@ -45,7 +41,7 @@ const LatestMember = ({ membershipData }) => {
                     ) : (
                         <tr>
                             <td
-                                colSpan="10"
+                                colSpan="7"
                                 className="border border-gray-300 px-4 py-2 text-center text-gray-500"
                             >
                                 No results found.

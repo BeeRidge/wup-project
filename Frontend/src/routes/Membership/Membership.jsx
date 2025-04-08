@@ -47,7 +47,11 @@ const Membership = () => {
 
     // Search functionality
     const searchedData = filteredUsers.filter((member) =>
-        Object.values(member).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())),
+        Object.values({
+            ...member,
+            FullName:
+                `${member.FirstName} ${member.MiddleName ? member.MiddleName.charAt(0) + "." : ""} ${member.LastName} ${member.SuffixName || ""}`.trim(),
+        }).some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())),
     );
 
     // Pagination Logic
@@ -58,15 +62,21 @@ const Membership = () => {
 
     // Render the appropriate batch component based on selected tranche
     const renderBatchTranche = () => {
+        const updatedItems = currentItems.map((member) => ({
+            ...member,
+            FullName:
+                `${member.FirstName} ${member.MiddleName ? member.MiddleName.charAt(0) + "." : ""} ${member.LastName} ${member.SuffixName || ""}`.trim(),
+        }));
+
         switch (selectedTranche) {
             case "First Tranche":
-                return <FirstTranches membershipData={currentItems} />;
+                return <FirstTranches membershipData={updatedItems} />;
             case "Second Tranche":
-                return <SecondTranches membershipData={currentItems} />;
+                return <SecondTranches membershipData={updatedItems} />;
             case "member":
-                return <LatestMember membershipData={currentItems} />;
+                return <LatestMember membershipData={updatedItems} />;
             default:
-                return <LatestMember membershipData={currentItems} />;
+                return <LatestMember membershipData={updatedItems} />;
         }
     };
 
@@ -106,7 +116,7 @@ const Membership = () => {
             {/* Search and Items Per Page Dropdown */}
             <div className="mb-4 flex items-center justify-between">
                 <select
-                    className="rounded-md border p-2 mt-3 dark:bg-gray-800 dark:text-white"
+                    className="mt-3 rounded-md border p-2 dark:bg-gray-800 dark:text-white"
                     value={itemsPerPage}
                     onChange={(e) => {
                         setItemsPerPage(Number(e.target.value));

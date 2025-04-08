@@ -156,20 +156,12 @@ app.get('/api/DiseaseCount', (req, res) => {
 // Show latest disease report
 app.get('/api/reports', (req, res) => {
     const sql = `
-        SELECT 
-            t2.id,
-            t2.ConNumber,
-            t2.AssessmentDiagnosis,
-            t2.ConsultationDate,
-            t1.PinNumber,
-            t1.MemberType,
-            t1.FirstName,
-            t1.MiddleName,
-            t1.LastName,
-            t1.SuffixName
-            FROM consultation AS t2, member AS t1
-            WHERE t2.PinNumber = t1.PinNumber
-            ORDER BY t2.ConsultationDate DESC;
+        SELECT  * 
+        FROM member AS m
+        LEFT JOIN consultation AS c ON m.PinNumber = c.PinNumber
+        LEFT JOIN healthassessment AS h ON m.PinNumber = h.PinNumber
+        WHERE m.PinNumber = c.PinNumber
+        ORDER BY c.ConsultationDate DESC
     `;
     db.query(sql, (err, data) => {
         if (err) return res.status(500).json({ error: err.message });

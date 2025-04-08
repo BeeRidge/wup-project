@@ -1,6 +1,6 @@
 import React from "react";
 
-const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
+const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric" };
         return new Date(dateString).toLocaleDateString("en-US", options);
@@ -29,7 +29,7 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
             <div className="h-[80vh] w-full max-w-5xl overflow-y-auto rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800 dark:text-white">
                 {/* Modal Header */}
                 <div className="mb-6 border-b pb-4">
-                    <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Consultation</h2>
+                    <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Health Assesment</h2>
                 </div>
 
                 {/* 3-Column Layout */}
@@ -38,22 +38,19 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
                     <div>
                         <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Basic Information</h3>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Consultation Number:</strong> {consultationNumber?.ConNumber}
+                            <strong>Health Assessment Number:</strong> {HealthAssessmentNumber?.HSANumber}
                         </p>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Pin Number:</strong> {consultationNumber?.PinNumber}
+                            <strong>Patient Name:</strong> {HealthAssessmentNumber?.FirstName} {HealthAssessmentNumber?.LastName}
                         </p>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Patient Name:</strong> {consultationNumber?.FirstName} {consultationNumber?.LastName}
+                            <strong>Gender:</strong> {HealthAssessmentNumber?.Gender}
                         </p>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Gender:</strong> {consultationNumber?.Gender}
+                            <strong>Disease Type:</strong> {HealthAssessmentNumber?.AssessmentDiagnosis}
                         </p>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Disease Type:</strong> {consultationNumber?.AssessmentDiagnosis}
-                        </p>
-                        <p className="text-gray-600 dark:text-white">
-                            <strong>Consultation Date:</strong> {formatDate(consultationNumber?.ConsultationDate)}
+                            <strong>Assessment Date:</strong> {formatDate(HealthAssessmentNumber?.AssessmentDate)}
                         </p>
 
                         <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Past Medical History</h3>
@@ -101,7 +98,7 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
                         <p className="text-gray-600 dark:text-white">{familyPlanning}</p>
 
                         {/* Conditional Rendering for Female Patients */}
-                        {consultationNumber?.Gender === "Female" && (
+                        {HealthAssessmentNumber?.Gender === "Female" && (
                             <>
                                 <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Menstrual History</h3>
                                 <p className="text-gray-600">{menstrualHistory}</p>
@@ -138,4 +135,4 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
     );
 };
 
-export default ConsultationModal;
+export default HealthAssessmentModal;

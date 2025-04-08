@@ -15,10 +15,7 @@ const FirstTranches = ({ membershipData }) => {
                         <th className="border border-gray-300 px-4 py-2">PIN No.</th>
                         <th className="border border-gray-300 px-4 py-2">Health Assessment No.</th>
                         <th className="border border-gray-300 px-4 py-2">Member Type</th>
-                        <th className="border border-gray-300 px-4 py-2">First Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Middle Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Last Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Suffix</th>
+                        <th className="border border-gray-300 px-4 py-2">Full Name</th>
                         <th className="border border-gray-300 px-4 py-2">Health Assessment Date</th>
                     </tr>
                 </thead>
@@ -33,17 +30,16 @@ const FirstTranches = ({ membershipData }) => {
                                 <td className="border border-gray-300 px-4 py-2">{member.PinNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.HSANumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.MemberType}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.FirstName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.MiddleName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.LastName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.SuffixName}</td>
+                                <td className="border border-gray-300 px-4 py-2">
+                                    {`${member.FirstName} ${member.MiddleName ? member.MiddleName.charAt(0) + "." : ""} ${member.LastName} ${member.SuffixName || ""}`.trim()}
+                                </td>
                                 <td className="border border-gray-300 px-4 py-2">{formatDate(member.AssessmentDate)}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
                             <td
-                                colSpan="9"
+                                colSpan="6"
                                 className="border border-gray-300 px-4 py-2 text-center text-gray-500"
                             >
                                 No results found.

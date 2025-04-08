@@ -14,12 +14,10 @@ const SecondTranches = ({ membershipData }) => {
                         <th className="border border-gray-300 px-4 py-2">No</th>
                         <th className="border border-gray-300 px-4 py-2">PIN No.</th>
                         <th className="border border-gray-300 px-4 py-2">Health Assessment No.</th>
+                        <th className="border border-gray-300 px-4 py-2">Consultation No.</th>
                         <th className="border border-gray-300 px-4 py-2">Member Type</th>
-                        <th className="border border-gray-300 px-4 py-2">First Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Middle Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Last Name</th>
-                        <th className="border border-gray-300 px-4 py-2">Suffix</th>
-                        <th className="border border-gray-300 px-4 py-2">Health Assessment Date</th>
+                        <th className="border border-gray-300 px-4 py-2">Full Name</th>
+                        <th className="border border-gray-300 px-4 py-2">Consultation Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,18 +30,18 @@ const SecondTranches = ({ membershipData }) => {
                                 <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.PinNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.HSANumber}</td>
+                                <td className="border border-gray-300 px-4 py-2">{member.ConNumber}</td>
                                 <td className="border border-gray-300 px-4 py-2">{member.MemberType}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.FirstName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.MiddleName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.LastName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{member.SuffixName}</td>
-                                <td className="border border-gray-300 px-4 py-2">{formatDate(member.AssessmentDate)}</td>
+                                <td className="border border-gray-300 px-4 py-2">
+                                    {`${member.FirstName} ${member.MiddleName ? member.MiddleName.charAt(0) + "." : ""} ${member.LastName} ${member.SuffixName || ""}`.trim()}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-2">{formatDate(member.ConsultationDate)}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
                             <td
-                                colSpan="9"
+                                colSpan="7"
                                 className="border border-gray-300 px-4 py-2 text-center text-gray-500"
                             >
                                 No results found.
