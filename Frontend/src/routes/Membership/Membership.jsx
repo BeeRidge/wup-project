@@ -71,7 +71,7 @@ const Membership = () => {
     };
 
     return (
-        <div className="mt-2 w-full bg-white p-4">
+        <div className="mt-2 w-full bg-white p-4 dark:bg-gray-800 dark:text-white">
             {/* Tranche selection buttons */}
             <div className="flex space-x-4">
                 <button
@@ -106,7 +106,7 @@ const Membership = () => {
             {/* Search and Items Per Page Dropdown */}
             <div className="mb-4 flex items-center justify-between">
                 <select
-                    className="rounded-md border p-2"
+                    className="rounded-md border p-2 mt-3 dark:bg-gray-800 dark:text-white"
                     value={itemsPerPage}
                     onChange={(e) => {
                         setItemsPerPage(Number(e.target.value));
@@ -122,7 +122,7 @@ const Membership = () => {
                 <input
                     type="text"
                     placeholder="Search..."
-                    className="w-64 rounded-md border p-2"
+                    className="w-64 rounded-md border p-2 dark:bg-gray-800 dark:text-white"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />

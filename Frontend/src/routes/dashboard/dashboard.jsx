@@ -85,11 +85,12 @@ const DashboardPage = () => {
                     secondTranche={eKonsultaData.secondTranche}
                 />
             </div>
-            <div className="flex w-full gap-6">
+            <div className="flex flex-col lg:flex-row w-full gap-6 justify-start">
                 <MonthlyConsultations consultationTrends={consultationTrends} />
                 <TopDiagnosedConditions diagnosedConditions={diagnosedConditions} />
             </div>
-        </div>
+
+        </div >
     );
 };
 

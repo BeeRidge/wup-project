@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import Layout from "@/routes/layout";
 import DashboardPage from "@/routes/dashboard/dashboard";
 import Membership from "./routes/Membership/Membership";
-import SecondTranches from "./routes/Membership/SecondTranches";
-import FirstTranches from "./routes/Membership/FirstTranches";
 import Login from "./routes/auth/Login";
 import "./index.css";
 import ReportPage from "./routes/reports/report-page";
 import SettingPage from "./routes/settings/setting-page";
+import EditProfile from "./routes/settings/components/EditProfile";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -59,6 +58,10 @@ function App() {
                     path: "settings",
                     element: isAuthenticated ? <SettingPage /> : <Navigate to="/login" />,
                 },
+                {
+                    path: "settings/edit-profile",
+                    element: isAuthenticated ? <EditProfile /> : <Navigate to="/login" />
+                }
             ],
         },
         {

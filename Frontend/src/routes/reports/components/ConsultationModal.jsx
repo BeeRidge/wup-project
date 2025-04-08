@@ -21,26 +21,26 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-            <div className="w-full max-w-5xl h-[80vh] overflow-y-auto rounded-lg bg-white p-8 shadow-xl">
+            <div className="w-full max-w-5xl h-[80vh] overflow-y-auto rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800 dark:text-white">
                 {/* Modal Header */}
                 <div className="mb-6 border-b pb-4">
-                    <h2 className="text-3xl font-bold text-gray-800">Health Assesment</h2>
+                    <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Health Assesment</h2>
                 </div>
 
                 {/* 3-Column Layout */}
                 <div className="grid grid-cols-3 gap-6">
                     {/* Column 1 */}
                     <div>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-700">Basic Information</h3>
-                        <p className="text-gray-600"><strong>Consultation Number:</strong> {consultationNumber?.ConNumber}</p>
-                        <p className="text-gray-600"><strong>Pin Number:</strong> {consultationNumber?.PinNumber}</p>
-                        <p className="text-gray-600"><strong>Patient Name:</strong> {consultationNumber?.FirstName} {consultationNumber?.LastName}</p>
-                        <p className="text-gray-600"><strong>Gender:</strong> {consultationNumber?.Gender}</p>
-                        <p className="text-gray-600"><strong>Disease Type:</strong> {consultationNumber?.AssessmentDiagnosis}</p>
-                        <p className="text-gray-600"><strong>Consultation Date:</strong> {consultationNumber?.ConsultationDate}</p>
+                        <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Basic Information</h3>
+                        <p className="text-gray-600 dark:text-white"><strong>Consultation Number:</strong> {consultationNumber?.ConNumber}</p>
+                        <p className="text-gray-600 dark:text-white"><strong>Pin Number:</strong> {consultationNumber?.PinNumber}</p>
+                        <p className="text-gray-600 dark:text-white"><strong>Patient Name:</strong> {consultationNumber?.FirstName} {consultationNumber?.LastName}</p>
+                        <p className="text-gray-600 dark:text-white"><strong>Gender:</strong> {consultationNumber?.Gender}</p>
+                        <p className="text-gray-600 dark:text-white"><strong>Disease Type:</strong> {consultationNumber?.AssessmentDiagnosis}</p>
+                        <p className="text-gray-600 dark:text-white"><strong>Consultation Date:</strong> {consultationNumber?.ConsultationDate}</p>
 
-                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Past Medical History</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
+                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Past Medical History</h3>
+                        <ul className="list-disc pl-5 text-gray-600  dark:text-white">
                             {pastMedicalHistory.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
@@ -49,22 +49,22 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
 
                     {/* Column 2 */}
                     <div>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-700">Past Surgery</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
+                        <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Past Surgery</h3>
+                        <ul className="list-disc pl-5 text-gray-600 dark:text-white">
                             {pastSurgery.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
                         </ul>
 
-                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Family History</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
+                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Family History</h3>
+                        <ul className="list-disc pl-5 text-gray-600 dark:text-white">
                             {familyHistory.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
                         </ul>
 
-                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Personal Social History</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
+                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Personal Social History</h3>
+                        <ul className="list-disc pl-5 text-gray-600 dark:text-white">
                             {personalSocialHistory.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
@@ -73,24 +73,24 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
 
                     {/* Column 3 */}
                     <div>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-700">Immunizations</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
+                        <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Immunizations</h3>
+                        <ul className="list-disc pl-5 text-gray-600 dark:text-white">
                             {immunizations.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}
                         </ul>
 
-                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Family Planning</h3>
-                        <p className="text-gray-600">{familyPlanning}</p>
+                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Family Planning</h3>
+                        <p className="text-gray-600  dark:text-white">{familyPlanning}</p>
 
                         {/* Conditional Rendering for Female Patients */}
                         {consultationNumber?.Gender === "Female" && (
                             <>
-                                <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Menstrual History</h3>
+                                <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Menstrual History</h3>
                                 <p className="text-gray-600">{menstrualHistory}</p>
 
-                                <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Pregnancy History</h3>
-                                <ul className="list-disc pl-5 text-gray-600">
+                                <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Pregnancy History</h3>
+                                <ul className="list-disc pl-5 text-gray-600 dark:text-white">
                                     {pregnancyHistory.map((item, index) => (
                                         <li key={index}>{item}</li>
                                     ))}
@@ -98,8 +98,8 @@ const ConsultationModal = ({ isOpen, onClose, consultationNumber }) => {
                             </>
                         )}
 
-                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700">Pertinent Physical Examination Findings</h3>
-                        <ul className="list-disc pl-5 text-gray-600">
+                        <h3 className="mt-6 mb-2 text-lg font-semibold text-gray-700 dark:text-white">Pertinent Physical Examination Findings</h3>
+                        <ul className="list-disc pl-5 text-gray-600  dark:text-white">
                             {physicalExaminationFindings.map((item, index) => (
                                 <li key={index}>{item}</li>
                             ))}

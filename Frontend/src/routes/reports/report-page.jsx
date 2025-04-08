@@ -310,7 +310,7 @@ const ReportPage = () => {
 
                 {/* Pagination */}
 
-                <div className="flex items-center justify-between pt-4">
+                <div className="flex items-center justify-between pt-4 dark:text-white">
                     <p>
                         Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, filteredPatients.length)} of {filteredPatients.length} entries
                     </p>
@@ -341,11 +341,11 @@ const ReportPage = () => {
                     </div>
                 </div>
             </div>
-
+            {/* 
             <div className="mt-5 w-full rounded-lg bg-white p-6 shadow-lg">
                 <h1 className="mb-4 text-start text-2xl font-bold text-gray-900">Member Balance Table</h1>
                 <MemberTable members={MemberBalance} />
-            </div>
+            </div> */}
         </div>
     );
 };

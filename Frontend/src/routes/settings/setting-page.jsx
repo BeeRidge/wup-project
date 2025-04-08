@@ -1,6 +1,20 @@
+import { useNavigate } from "react-router-dom";
 
 
+
+
+
+
+const handleLogout = () => {
+    // Clear any authentication tokens or user data here if necessary
+}
 const SettingPage = () => {
+    const navigate = useNavigate();
+    const handleEditProfile = () => {
+
+
+    };
+
     return (
         <div className="flex flex-col items-center p-10 text-black space-y-5">
             <h1 className="text-4xl font-semibold dark:text-white">Settings</h1>
@@ -12,8 +26,9 @@ const SettingPage = () => {
                 <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Change Password</a>
                 </div>
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Edit Profile</a>
+
+                <div onClick={handleEditProfile} className=" bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white cursor-pointer dark:hover:bg-slate-300">
+                    Edit Profile
                 </div>
 
                 {/* Hospital Management */}
@@ -49,7 +64,7 @@ const SettingPage = () => {
                 </div>
 
                 {/* Logout */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-red-500 hover:text-white">
+                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-white">
                     <a href="">Log Out</a>
                 </div>
             </div>
