@@ -1,75 +1,85 @@
 import { useNavigate } from "react-router-dom";
-
-
-
-
-
+import React from "react";
+import handleExportData from "./components/ExportData";
+import handleImportData from "./components/ImportData";
 
 const handleLogout = () => {
     // Clear any authentication tokens or user data here if necessary
-}
+};
+
 const SettingPage = () => {
     const navigate = useNavigate();
+
     const handleEditProfile = () => {
-
-
+        // Handle edit profile logic
     };
 
     return (
-        <div className="flex flex-col items-center p-10 text-black space-y-5">
+        <div className="flex flex-col items-center space-y-5 p-10 text-black">
             <h1 className="text-4xl font-semibold dark:text-white">Settings</h1>
 
             {/* Settings Options */}
-            <div className="grid grid-cols-2 gap-6 w-full max-w-4xl">
-
+            <div className="grid w-full max-w-4xl grid-cols-2 gap-6">
                 {/* Account Management */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Change Password</a>
                 </div>
 
-                <div onClick={handleEditProfile} className=" bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white cursor-pointer dark:hover:bg-slate-300">
+                <div
+                    onClick={handleEditProfile}
+                    className="cursor-pointer rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-slate-300"
+                >
                     Edit Profile
                 </div>
 
                 {/* Hospital Management */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Manage Hospitals</a>
                 </div>
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Switch Hospital</a>
                 </div>
 
                 {/* System Preferences */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Notification Settings</a>
                 </div>
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Theme & Language</a>
                 </div>
 
                 {/* Security */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Manage Users</a>
                 </div>
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Activity Logs</a>
                 </div>
 
                 {/* Data Management */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Export Data</a>
+                <div
+                    onClick={handleExportData}
+                    className="cursor-pointer rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-slate-300"
+                >
+                    Export Data
                 </div>
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
+                <div
+                    onClick={handleImportData}
+                    className="cursor-pointer rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-slate-300"
+                >
+                    Import Data
+                </div>
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Backup & Restore</a>
                 </div>
 
                 {/* Logout */}
-                <div className="bg-white shadow-sm p-4 rounded-lg text-gray-700 font-semibold hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-white">
+                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-white">
                     <a href="">Log Out</a>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default SettingPage;

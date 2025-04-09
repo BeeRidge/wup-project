@@ -1,26 +1,141 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2'); // Use mysql2 for better support
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { create } = require('xmlbuilder2'); // Library to build XML
+const multer = require('multer'); // Middleware for handling file uploads
+const { parseStringPromise } = require('xml2js'); // Library to parse XML into JSON
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Configure multer for file uploads
+const upload = multer({ storage: multer.memoryStorage() });
+
 const db = mysql.createConnection({
     host: "localhost",
     user: 'root',
     password: '',
     database: 'prototype'
 });
+
 db.connect((err) => {
     if (err) {
         console.error("Database connection failed: " + err.stack);
-        return;
+        process.exit(1); // Exit if the database connection fails
     }
     console.log("Connected to database");
 });
+
 app.get('/', (req, res) => {
     return res.json("From Backend Side");
 });
+
+/* ------------------------------------------------------------------------------------------------------------- */
+// Convert MySQL Data to XML API
+app.get('/api/export-xml', (req, res) => {
+    const sql = `
+    SELECT PinNumber, MemberType, FirstName, MiddleName, LastName, SuffixName, Sex, MobileNumber, Balance, 
+    DATE_FORMAT(DateofBirth, '%Y-%m-%d') AS DateofBirth,
+    DATE_FORMAT(RegistrationDate, '%Y-%m-%d') AS RegistrationDate 
+    FROM member 
+    ORDER BY RegistrationDate DESC
+    `;
+
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error("Error fetching data:", err);
+            return res.status(500).json({ error: "Failed to fetch data" });
+        }
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({ error: "No data available to export" });
+        }
+
+        try {
+            const xml = create({ version: '1.0' })
+                .ele('members')
+                .ele(data.map(row => {
+                    const member = {};
+                    for (const key in row) {
+                        member[key] = row[key];
+                    }
+                    return { member };
+                }))
+                .end({ prettyPrint: true });
+
+            res.setHeader("Content-Type", "application/xml");
+            res.setHeader("Content-Disposition", "attachment; filename=members.xml");
+            res.status(200).send(xml);
+        } catch (conversionError) {
+            console.error("Error converting data to XML:", conversionError);
+            res.status(500).json({ error: "Failed to convert data to XML" });
+        }
+    });
+});
+
+/* ------------------------------------------------------------------------------------------------------------- */
+// Import Data API
+app.post('/api/import-xml', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            console.error("No file uploaded");
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+
+        console.log("File uploaded:", req.file.originalname);
+
+        // Parse the XML file
+        const xmlData = req.file.buffer.toString();
+        console.log("XML Data:", xmlData);
+
+        const jsonData = await parseStringPromise(xmlData);
+        console.log("Parsed JSON Data:", jsonData);
+
+        // Extract and validate the data
+        const members = jsonData.members.member;
+        if (!members || !Array.isArray(members)) {
+            console.error("Invalid XML format");
+            return res.status(400).json({ error: "Invalid XML format" });
+        }
+
+        console.log("Members to insert:", members);
+
+        // Insert data into the database
+        const sql = `
+            INSERT INTO proto (
+                PinNumber, MemberType, FirstName, MiddleName, LastName, SuffixName, 
+                Sex, MobileNumber, Balance, DateofBirth, RegistrationDate
+            ) VALUES ?
+        `;
+        const values = members.map((member) => [
+            member.PinNumber[0],
+            member.MemberType[0],
+            member.FirstName[0],
+            member.MiddleName ? member.MiddleName[0] : null, // Handle optional field
+            member.LastName[0],
+            member.SuffixName && member.SuffixName[0] ? member.SuffixName[0] : null, // Handle optional field
+            member.Sex[0],
+            member.MobileNumber && member.MobileNumber[0] ? member.MobileNumber[0] : null, // Handle optional field
+            member.Balance[0],
+            member.DateofBirth[0],
+            member.RegistrationDate[0],
+        ]);
+
+        db.query(sql, [values], (err) => {
+            if (err) {
+                console.error("Error inserting data:", err);
+                return res.status(500).json({ error: "Failed to insert data into the database" });
+            }
+            res.status(200).json({ message: "Data imported successfully" });
+        });
+    } catch (error) {
+        console.error("Error importing data:", error);
+        res.status(500).json({ error: "Failed to import data" });
+    }
+});
+
 /* ------------------------------------------------------------------------------------------------------------- */
 // Login API
 app.post('/api/login', (req, res) => {
