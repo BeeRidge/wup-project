@@ -31,15 +31,18 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
             case 1:
                 return (
                     <>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Basic Information</h3>
+                        <h3 className="mb-2 text-xl font-semibold text-gray-700 dark:text-white">Client Profile</h3>
                         <p className="text-gray-600 dark:text-white">
                             <strong>Health Assessment Number:</strong> {HealthAssessmentNumber?.HSANumber}
                         </p>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Patient Name:</strong> {HealthAssessmentNumber?.FirstName} {HealthAssessmentNumber?.LastName}
+                            <strong>Patient Name: </strong>
+                            {HealthAssessmentNumber?.FirstName}{" "}
+                            {HealthAssessmentNumber?.MiddleName ? HealthAssessmentNumber?.MiddleName.charAt(0) + "." : ""}{" "}
+                            {HealthAssessmentNumber?.LastName} {HealthAssessmentNumber?.SuffixName || ""}
                         </p>
                         <p className="text-gray-600 dark:text-white">
-                            <strong>Gender:</strong> {HealthAssessmentNumber?.Gender}
+                            <strong>Gender:</strong> {HealthAssessmentNumber?.Sex}
                         </p>
                         <p className="text-gray-600 dark:text-white">
                             <strong>Disease Type:</strong> {HealthAssessmentNumber?.AssessmentDiagnosis}
