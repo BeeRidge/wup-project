@@ -10,10 +10,6 @@ const handleLogout = () => {
 const SettingPage = () => {
     const navigate = useNavigate();
 
-    const handleEditProfile = () => {
-        // Handle edit profile logic
-    };
-
     return (
         <div className="flex flex-col items-center space-y-5 p-10 text-black">
             <h1 className="text-4xl font-semibold dark:text-white">Settings</h1>
