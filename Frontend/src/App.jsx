@@ -9,9 +9,9 @@ import "./index.css";
 import ReportPage from "./routes/reports/report-page";
 import SettingPage from "./routes/settings/setting-page";
 import EditProfile from "./routes/settings/components/EditProfile";
-
+import LogsPage from "./routes/settings/components/LogsPage";
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
 
     useEffect(() => {
         // Check if user is authenticated (stored in localStorage)
@@ -61,6 +61,11 @@ function App() {
                 {
                     path: "settings/edit-profile",
                     element: isAuthenticated ? <EditProfile /> : <Navigate to="/login" />
+                },
+
+                {
+                    path: "logs",
+                    element: isAuthenticated ? <LogsPage/> : <Navigate to="/login" />,
                 }
             ],
         },

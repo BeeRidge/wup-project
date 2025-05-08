@@ -7,6 +7,11 @@ import PropTypes from "prop-types";
 export const Header = ({ collapsed, setCollapsed }) => {
     const { theme, setTheme } = useTheme();
 
+    const handleLogout = () => {
+        localStorage.removeItem("isAuthenticated"); // Remove authentication token or data
+        window.location.href = "/login"; // Redirect to login page
+    }
+
     // States for dropdowns
     const [openProfile, setOpenProfile] = useState(false);
     const [openNotifications, setOpenNotifications] = useState(false);
@@ -79,17 +84,17 @@ export const Header = ({ collapsed, setCollapsed }) => {
                     className="relative"
                     ref={notifRef}
                 >
-                    <button
+                   {/*  <button
                         className="btn-ghost relative size-10"
                         onClick={() => setOpenNotifications(!openNotifications)}
                     >
                         <Bell size={20} />
-                        {/* Notification Badge */}
+                      
                         <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                             3
                         </span>
                     </button>
-
+ */}
                     {/* Dropdown Menu */}
                     {openNotifications && (
                         <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white shadow-lg dark:bg-slate-800">
@@ -129,33 +134,12 @@ export const Header = ({ collapsed, setCollapsed }) => {
                         <div className="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg dark:bg-slate-800">
                             <ul className="py-2 text-gray-700 dark:text-gray-300">
                                 {/* Profile */}
-                                <li
-                                    className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={() => console.log("Go to Profile")}
-                                >
-                                    <User
-                                        size={18}
-                                        className="mr-2"
-                                    />{" "}
-                                    Profile
-                                </li>
 
-                                {/* Settings */}
-                                <li
-                                    className="flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={() => console.log("Go to Settings")}
-                                >
-                                    <Settings
-                                        size={18}
-                                        className="mr-2"
-                                    />{" "}
-                                    Settings
-                                </li>
-
+                               
                                 {/* Logout */}
                                 <li
                                     className="flex cursor-pointer items-center px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"
-                                    onClick={() => console.log("Logging out...")}
+                                    onClick={handleLogout}
                                 >
                                     <LogOut
                                         size={18}

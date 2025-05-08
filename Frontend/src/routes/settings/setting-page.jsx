@@ -1,14 +1,32 @@
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import handleExportData from "./components/ExportData";
 import handleImportData from "./components/ImportData";
+import TranchesModal from "./TranchesModal";
 
 const handleLogout = () => {
-    // Clear any authentication tokens or user data here if necessary
+    // Implement logout functionality here
+    console.log("Logging out...");
+    localStorage.removeItem("isAuthenticated"); // Remove authentication token or data
+    window.location.href = "/login"; // Redirect to login page
 };
 
 const SettingPage = () => {
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleViewLogs = () => {
+        navigate("/logs"); // Navigate to the logs page
+    };
+
 
     return (
         <div className="flex flex-col items-center space-y-5 p-10 text-black">
@@ -19,37 +37,6 @@ const SettingPage = () => {
                 {/* Account Management */}
                 <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
                     <a href="">Change Password</a>
-                </div>
-
-                <div
-                    onClick={handleEditProfile}
-                    className="cursor-pointer rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-slate-300"
-                >
-                    Edit Profile
-                </div>
-
-                {/* Hospital Management */}
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Manage Hospitals</a>
-                </div>
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Switch Hospital</a>
-                </div>
-
-                {/* System Preferences */}
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Notification Settings</a>
-                </div>
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Theme & Language</a>
-                </div>
-
-                {/* Security */}
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Manage Users</a>
-                </div>
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Activity Logs</a>
                 </div>
 
                 {/* Data Management */}
@@ -65,15 +52,35 @@ const SettingPage = () => {
                 >
                     Import Data
                 </div>
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white">
-                    <a href="">Backup & Restore</a>
+                <div
+                    onClick={handleOpenModal}
+                    className="cursor-pointer rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-slate-300"
+                >
+                    Change Tranches Value
                 </div>
 
+                <div
+                    onClick={handleViewLogs}
+                    className="cursor-pointer rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-slate-300"
+                >
+                    Activity Logs
+                </div>
+
+
                 {/* Logout */}
-                <div className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-white">
-                    <a href="">Log Out</a>
+                <div
+                    onClick={handleLogout}
+                    className="rounded-lg bg-white p-4 font-semibold text-gray-700 shadow-sm hover:bg-red-500 hover:text-white dark:bg-gray-800 dark:text-white dark:hover:bg-red-500 dark:hover:text-white"
+                >
+                    Log out
                 </div>
             </div>
+
+            {/* Tranches Modal */}
+            <TranchesModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+            />
         </div>
     );
 };

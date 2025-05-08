@@ -33,6 +33,17 @@ app.get('/', (req, res) => {
 });
 
 /* ------------------------------------------------------------------------------------------------------------- */
+// Utility function to log actions
+const logAction = (action, description) => {
+    const sql = `INSERT INTO logs (action, description) VALUES (?, ?)`;
+    db.query(sql, [action, description], (err) => {
+        if (err) {
+            console.error("Failed to log action:", err.message);
+        }
+    });
+};
+
+/* ------------------------------------------------------------------------------------------------------------- */
 // Convert MySQL Data to XML API
 app.get('/api/export-xml', (req, res) => {
     const sql = `
@@ -287,4 +298,412 @@ app.get('/api/reports', (req, res) => {
 // Show latest member table
 app.listen(8081, () => {
     console.log("Server running on http://localhost:8081");
+});
+
+
+//Tranches value API
+app.get('/api/tranches', (req, res) => {
+    const sql = `
+        SELECT m.PinNumber, m.Balance, c.ConNumber
+        FROM member AS m
+        LEFT JOIN consultation AS c ON m.PinNumber = c.PinNumber
+    `;
+    db.query(sql, (err, data) => {
+        if (err) return res.status(500).json({ error: err.message });
+        return res.json(data);
+    });
+});
+
+app.post('/api/tranches', (req, res) => {
+    const { pinNumber, actionType } = req.body;
+
+    if (!pinNumber || !actionType) {
+        return res.status(400).json({ error: "PinNumber and actionType are required." });
+    }
+
+    // Define the deduction amounts
+    const DEDUCTIONS = {
+        HealthAssessment: 200,
+        Consultation: 1000,
+    };
+
+    // Fetch the member's details
+    const fetchMemberSql = `
+        SELECT MemberType, Balance 
+        FROM member 
+        WHERE PinNumber = ?
+    `;
+
+    db.query(fetchMemberSql, [pinNumber], (err, result) => {
+        if (err) {
+            console.error("Error fetching member details:", err.message);
+            return res.status(500).json({ error: "Failed to fetch member details." });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: "Member not found." });
+        }
+
+        const member = result[0];
+        let newBalance = member.Balance;
+
+        // Determine the initial balance based on MemberType
+        if (member.MemberType === "Member") {
+            newBalance = 1500;
+        } else if (member.MemberType === "NonMember") {
+            newBalance = 1700;
+        }
+
+        // Apply deductions based on the action type
+        if (actionType === "HealthAssessment") {
+            newBalance -= DEDUCTIONS.HealthAssessment;
+        } else if (actionType === "Consultation") {
+            newBalance -= DEDUCTIONS.Consultation;
+        } else {
+            return res.status(400).json({ error: "Invalid actionType provided." });
+        }
+
+        // Ensure the balance doesn't go below zero
+        if (newBalance < 0) {
+            return res.status(400).json({ error: "Insufficient balance." });
+        }
+
+        // Update the member's balance in the database
+        const updateBalanceSql = `
+            UPDATE member 
+            SET Balance = ? 
+            WHERE PinNumber = ?
+        `;
+
+        db.query(updateBalanceSql, [newBalance, pinNumber], (updateErr) => {
+            if (updateErr) {
+                console.error("Error updating balance:", updateErr.message);
+                return res.status(500).json({ error: "Failed to update balance." });
+            }
+
+            // Log the action
+            logAction(
+                "Balance Update",
+                `Updated balance for PinNumber: ${pinNumber}. Action: ${actionType}. New Balance: ${newBalance}`
+            );
+
+            return res.json({ message: "Balance updated successfully.", newBalance });
+        });
+    });
+});
+
+app.get('/api/logs', (req, res) => {
+    const sql = `SELECT * FROM logs ORDER BY timestamp DESC`;
+    db.query(sql, (err, data) => {
+        if (err) {
+            console.error("Failed to fetch logs:", err.message);
+            return res.status(500).json({ error: "Failed to fetch logs." });
+        }
+        return res.json(data);
+    });
+});
+
+app.post('/api/update-nonmember-balances', (req, res) => {
+    const { balanceValue } = req.body;
+
+    // Validate the input
+    if (!balanceValue || isNaN(balanceValue)) {
+        return res.status(400).json({ error: "A valid balance value is required." });
+    }
+
+    // Update the balance for all non-members to the specified value
+    const updateBalanceSql = `
+        UPDATE member
+        SET Balance = ?
+        WHERE MemberType = 'NON MEMBER';
+    `;
+
+    db.query(updateBalanceSql, [balanceValue], (err, result) => {
+        if (err) {
+            console.error("Error updating non-member balances:", err.message);
+            return res.status(500).json({ error: "Failed to update non-member balances." });
+        }
+
+        return res.json({
+            message: "Non-member balances updated successfully.",
+            affectedRows: result.affectedRows,
+        });
+    });
+});
+
+// Add Member API
+app.post('/api/add-member', (req, res) => {
+    const {
+        PinNumber,
+        MemberType,
+        LastName,
+        FirstName,
+        MiddleName,
+        SuffixName,
+        DateofBirth,
+        Sex,
+        MobileNumber,
+        RegistrationDate,
+        Balance,
+    } = req.body;
+
+    // Validate required fields
+    if (
+        !PinNumber ||
+        !MemberType ||
+        !LastName ||
+        !FirstName ||
+        !DateofBirth ||
+        !Sex ||
+        !MobileNumber ||
+        !RegistrationDate ||
+        Balance === undefined
+    ) {
+        return res.status(400).json({ error: "All required fields must be provided." });
+    }
+
+    // SQL query to insert a new member
+    const sql = `
+        INSERT INTO member (
+            PinNumber, MemberType, LastName, FirstName, MiddleName, SuffixName, 
+            DateofBirth, Sex, MobileNumber, RegistrationDate, Balance
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+        PinNumber,
+        MemberType,
+        LastName,
+        FirstName,
+        MiddleName || null, // Handle optional fields
+        SuffixName || null, // Handle optional fields
+        DateofBirth,
+        Sex,
+        MobileNumber,
+        RegistrationDate,
+        Balance,
+    ];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Error adding member:", err.message);
+            return res.status(500).json({ error: "Failed to add member." });
+        }
+
+        // Log the action
+        logAction(
+            "Add Member",
+            `Added new member: ${FirstName} ${LastName} (PinNumber: ${PinNumber})`
+        );
+
+        return res.status(201).json({
+            message: "Member added successfully.",
+            memberId: result.insertId,
+        });
+    });
+});
+
+
+// Add Health Assessment API
+app.post('/api/add-health-assessment', (req, res) => {
+    const {
+        PinNumber,
+        HSANumber,
+        AssessmentDate,
+        PastMedicalHistory,
+        PastSurgery,
+        FamilyHistory,
+        PersonalSocialHistory,
+        Immunizations,
+        FamilyPlanning,
+        MenstrualHistory,
+        PregnancyHistory,
+        PhysicalExaminationFindings,
+        PertinentFindings,
+    } = req.body;
+
+    // Validate required fields
+    if (!PinNumber || !HSANumber || !AssessmentDate) {
+        return res.status(400).json({ error: "PinNumber, HSANumber, and AssessmentDate are required." });
+    }
+
+    // SQL query to insert a new health assessment
+    const sql = `
+        INSERT INTO healthassessment (
+            PinNumber, HSANumber, AssessmentDate, PastMedicalHistory, PastSurgery, FamilyHistory, 
+            PersonalSocialHistory, Immunizations, FamilyPlanning, MenstrualHistory, PregnancyHistory, 
+            PhysicalExaminationFindings, PertinentFindings
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [    
+        PinNumber,
+        HSANumber,
+        AssessmentDate,
+        PastMedicalHistory || null, // Handle optional fields
+        PastSurgery || null,
+        FamilyHistory || null,
+        PersonalSocialHistory || null,
+        Immunizations || null,
+        FamilyPlanning || null,
+        MenstrualHistory || null,
+        PregnancyHistory || null,
+        PhysicalExaminationFindings || null,
+        PertinentFindings || null,
+    ];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Error adding health assessment:", err.message);
+            return res.status(500).json({ error: "Failed to add health assessment." });
+        }
+
+        // Log the action
+        logAction(
+            "Add Health Assessment",
+            `Added health assessment for PinNumber: ${PinNumber} (HSANumber: ${HSANumber})`
+        );
+
+        return res.status(201).json({
+            message: "Health assessment added successfully.",
+            healthAssessmentId: result.insertId,
+        });
+    });
+});
+
+
+app.get('/api/health-assessment/:HSANumber', (req, res) => {
+    const { HSANumber } = req.params;
+
+    const sql = `
+        SELECT 
+            healthassessment.*, 
+            member.MemberType, 
+            member.FirstName, 
+            member.LastName, 
+            member.MiddleName, 
+            member.SuffixName, 
+            member.Sex 
+        FROM healthassessment
+        JOIN member ON healthassessment.PinNumber = member.PinNumber
+        WHERE healthassessment.HSANumber = ?
+    `;
+
+    db.query(sql, [HSANumber], (err, result) => {
+        if (err) {
+            console.error("Error fetching health assessment:", err.message);
+            return res.status(500).json({ error: "Failed to fetch health assessment." });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: "Health assessment not found." });
+        }
+
+        console.log("Health assessment data:", result[0]); // Debugging
+        return res.json(result[0]);
+    });
+});
+
+app.post('/api/add-consultation', (req, res) => {
+    console.log("Request Body:", req.body); // Log the incoming request body
+
+    const {
+        PinNumber,
+        ConsultationNumber,
+        ConsultationDate,
+        ChiefComplaint,
+        BloodPressure,
+        HeartRate,
+        RespiratoryRate,
+        VisualAcuityLeftEye,
+        VisualAcuityRightEye,
+        Height,
+        Weight,
+        BMI,
+        Temperature,
+        HEENT,
+        ChestBreastLungs,
+        Heart,
+        Abdomen,
+        Genitourinary,
+        RectalExam,
+        ExtremitiesSkin,
+        NeurologicalExam,
+        AssessmentDiagnosis,
+        Laboratory,
+        HSANumber, // Include HSANumber in the request body
+    } = req.body;
+
+    if (!PinNumber || !ConsultationNumber || !ConsultationDate || !AssessmentDiagnosis || !HSANumber) {
+        console.error("Validation failed: Missing required fields");
+        return res.status(400).json({
+            error: "PinNumber, ConsultationNumber, ConsultationDate, AssessmentDiagnosis, and HSANumber are required.",
+        });
+    }
+
+    // Check if the HSANumber exists in the healthassessment table
+    const checkHSASql = `SELECT HSANumber FROM healthassessment WHERE HSANumber = ? AND PinNumber = ?`;
+    db.query(checkHSASql, [HSANumber, PinNumber], (err, result) => {
+        if (err) {
+            console.error("Error checking HSANumber:", err.message);
+            return res.status(500).json({ error: "Failed to validate HSANumber." });
+        }
+
+        if (result.length === 0) {
+            return res.status(400).json({ error: "Invalid HSANumber or PinNumber." });
+        }
+
+        // Proceed to insert the consultation
+        const sql = `
+            INSERT INTO consultation (
+                PinNumber, ConNumber, ConsultationDate, ChiefComplaint, BloodPressure, HeartRate, 
+                RespiratoryRate, VisualAcuityLeftEye, VisualAcuityRightEye, Height, Weight, BMI, 
+                Temperature, HEENT, ChestBreastLungs, Heart, Abdomen, Genitourinary, RectalExam, 
+                ExtremitiesSkin, NeurologicalExam, AssessmentDiagnosis, Laboratory, HSANumber
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const values = [
+            PinNumber,
+            ConsultationNumber,
+            ConsultationDate,
+            ChiefComplaint || null,
+            BloodPressure || null,
+            HeartRate || null,
+            RespiratoryRate || null,
+            VisualAcuityLeftEye || null,
+            VisualAcuityRightEye || null,
+            Height || null,
+            Weight || null,
+            BMI || null,
+            Temperature || null,
+            HEENT || null,
+            ChestBreastLungs || null,
+            Heart || null,
+            Abdomen || null,
+            Genitourinary || null,
+            RectalExam || null,
+            ExtremitiesSkin || null,
+            NeurologicalExam || null,
+            AssessmentDiagnosis,
+            Laboratory || null,
+            HSANumber, // Include HSANumber in the values
+        ];
+
+        console.log("SQL Query:", sql); // Log the SQL query
+        console.log("Values:", values); // Log the values being inserted
+
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                console.error("Database Error:", err.message); // Log database errors
+                return res.status(500).json({ error: "Failed to add consultation." });
+            }
+
+            console.log("Consultation added successfully:", result.insertId); // Log success
+            return res.status(201).json({
+                message: "Consultation added successfully.",
+                consultationId: result.insertId,
+            });
+        });
+    });
 });

@@ -43,7 +43,16 @@ const Login = () => {
     return (
         <div className="mx-5 flex h-screen items-center justify-center bg-gray-100">
             <div className="w-96 rounded-lg bg-white p-8 shadow-md">
+
+            <div className="mb-4 flex items-center justify-center">
+  <h1 className="text-3xl font-bold text-green-700 text-center break-words max-w-full">
+    Wesleyan University Philippines Hospital
+  </h1>
+</div>
+
+
                 <div className="flex items-center justify-center">
+                    
                     <img
                         className="w-30 h-40 rounded object-cover"
                         src={logo}
@@ -76,12 +85,7 @@ const Login = () => {
                     <button type="submit" className="w-full rounded-lg bg-green-500 p-2 text-white">
                         Login
                     </button>
-                    <p className="text-center">
-                        Create an Account? {" "}
-                        <a className="text-blue-800" href="">
-                            Click here
-                        </a>
-                    </p>
+                    
                 </form>
             </div>
         </div>

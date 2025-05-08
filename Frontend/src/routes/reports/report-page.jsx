@@ -7,11 +7,11 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { Navigate, useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import MemberTable from "./components/MemberTable";
-import { MemberBalance } from "../../constants";
 import MemberModal from "./components/MemberModal";
 import ConsultationNumber from "./components/ConsultationModal";
-import HealthAssessmentNumber from "./components/HealthAssessmentModal";
+import HealthAssessmentModal from "./components/HealthAssessmentModal";
+
+
 
 const ReportPage = () => {
     const { theme } = useTheme();
@@ -66,7 +66,7 @@ const ReportPage = () => {
     const [selectedHealthAssessment, setSelectedHealthAssessment] = useState(null);
 
     const openModalHealthAssessment = (patient) => {
-        setSelectedHealthAssessment(patient);
+        setSelectedHealthAssessment(patient.HSANumber); // Pass only the HSANumber
         setIsModalOpenHealthAssessment(true);
     };
 
@@ -81,7 +81,7 @@ const ReportPage = () => {
     const [selectedConsultation, setSelectedConsultation] = useState(null);
 
     const openModalConsultation = (patient) => {
-        setSelectedConsultation(patient);
+        setSelectedConsultation(patient.HSANumber);
         setIsModalOpenConsultation(true);
     };
 
@@ -284,10 +284,10 @@ const ReportPage = () => {
                     onClose={() => setIsModalOpen(false)}
                     pinNumber={selectedPinNumber}
                 />
-                <HealthAssessmentNumber
+                <HealthAssessmentModal
                     isOpen={isModalOpenHealthAssessment}
                     onClose={closeModalHealthAssessment}
-                    HealthAssessmentNumber={selectedHealthAssessment}
+                    HealthAssessmentNumber={selectedHealthAssessment} // Correct prop name
                 />
 
                 <ConsultationNumber

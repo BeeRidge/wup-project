@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
+    const [data, setData] = useState(null); // State to store fetched data
+    const [loading, setLoading] = useState(false); // State to track loading
+    const [error, setError] = useState(null); // State to track errors
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
 
     const formatDate = (dateString) => {
@@ -12,8 +16,31 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
         return new Date(dateString).getFullYear(); // Extract only the year
     };
 
-    // Ensure case-insensitive comparison for "Female"
-    const isFemale = HealthAssessmentNumber?.Sex?.toLowerCase() === "female";
+    // Fetch data when the modal is opened
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!isOpen || !HealthAssessmentNumber) return;
+
+            console.log("Fetching data for HealthAssessmentNumber:", HealthAssessmentNumber); // Debugging
+            try {
+                const response = await axios.get(
+                    `http://localhost:8081/api/health-assessment/${encodeURIComponent(HealthAssessmentNumber)}`
+                );
+                console.log("Fetched health assessment data:", response.data); // Debugging
+                setData(response.data); // Store the fetched data
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    console.error("Health assessment not found.");
+                    setError("Health assessment not found.");
+                } else {
+                    console.error("Error fetching health assessment data:", error);
+                    setError("Failed to fetch health assessment data.");
+                }
+            }
+        };
+
+        fetchData();
+    }, [isOpen, HealthAssessmentNumber]);
 
     // Reset to the first page when the modal is closed
     useEffect(() => {
@@ -24,44 +51,21 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
 
     if (!isOpen) return null; // Don't render the modal if it's not open
 
-    // Static data for now (replace with dynamic data later)
-    const pastMedicalHistory = ["Hypertension", "Diabetes"];
-    const pastSurgery = ["Appendectomy (2015)", "Gallbladder Removal (2018)"];
-    const familyHistory = ["Father: Hypertension", "Mother: Diabetes"];
-    const personalSocialHistory = ["Non-smoker", "Occasional alcohol consumption"];
-    const immunizations = ["COVID-19 Vaccine (2021)", "Tetanus Booster (2020)"];
-    const familyPlanning = "Using oral contraceptives"; // Static for now
-    const menstrualHistory = "Regular cycles, 28 days"; // Static for now
-    const pregnancyHistory = ["1 pregnancy, 1 live birth"]; // Static for now
-    const physicalExaminationFindings = [
-        "Blood Pressure: 120/80 mmHg",
-        "Heart Rate: 72 bpm",
-        "Respiratory Rate: 16 breaths/min",
-        "Visual Acuity: 20/20",
-        "Blood Type: O+",
-        "Height: 170 cm",
-        "Weight: 70 kg",
-        "BMI: 24.2",
-        "Temperature: 36.7°C",
-    ];
-    const pertinentFindings = [
-        "A. HEENT: Essentially Normal",
-        "B. Chest/Breast/Lungs: Essentially Normal",
-        "C. Heart: Essentially Normal",
-        "D. Abdomen: Essentially Normal",
-        "E. Genitourinary: Essentially Normal",
-        "F. Digital Rectal: Essentially Normal",
-        "G. Skin/Extremities: Essentially Normal",
-        "H. Neurological: Essentially Normal",
-    ];
-    const immunizationsList = [
-        { group: "For Children", vaccines: ["Measles", "Mumps", "Rubella (MMR)", "Polio Vaccine"] },
-        { group: "For Adult", vaccines: ["Influenza Vaccine", "Hepatitis B Vaccine"] },
-        { group: "For Pregnant Woman", vaccines: ["Tetanus Toxoid", "Influenza Vaccine"], condition: isFemale },
-        { group: "For Elderly and Immunocompromised", vaccines: ["Pneumococcal Vaccine", "Shingles Vaccine"] },
-    ];
+    const isFemale = data?.Sex?.toLowerCase() === "female"; // Ensure case-insensitive comparison for "Female"
 
     const renderPageContent = () => {
+        if (loading) {
+            return <p className="text-gray-700 dark:text-white">Loading...</p>;
+        }
+
+        if (error) {
+            return <p className="text-red-500 dark:text-red-400">{error}</p>;
+        }
+
+        if (!data) {
+            return <p className="text-gray-700 dark:text-white">No data available.</p>;
+        }
+
         switch (currentPage) {
             case 1:
                 return (
@@ -74,57 +78,38 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
                         <br />
                         <div className="grid grid-cols-2 gap-4">
                             <p className="font-semibold text-gray-700 dark:text-white">Health Assessment Number:</p>
-                            <p className="text-gray-600 dark:text-white">{HealthAssessmentNumber?.HSANumber}</p>
+                            <p className="text-gray-600 dark:text-white">{data?.HSANumber}</p>
                             <p className="font-semibold text-gray-700 dark:text-white">Member Type:</p>
-                            <p className="text-gray-600 dark:text-white">{HealthAssessmentNumber?.MemberType}</p>
+                            <p className="text-gray-600 dark:text-white">{data?.MemberType}</p>
                             <p className="font-semibold text-gray-700 dark:text-white">Patient Name:</p>
                             <p className="text-gray-600 dark:text-white">
-                                {HealthAssessmentNumber?.FirstName}{" "}
-                                {HealthAssessmentNumber?.MiddleName ? HealthAssessmentNumber?.MiddleName.charAt(0) + "." : ""}{" "}
-                                {HealthAssessmentNumber?.LastName} {HealthAssessmentNumber?.SuffixName || ""}
+                                {data?.FirstName}{" "}
+                                {data?.MiddleName ? data?.MiddleName.charAt(0) + "." : ""}{" "}
+                                {data?.LastName} {data?.SuffixName || ""}
                             </p>
                             <p className="font-semibold text-gray-700 dark:text-white">Sex:</p>
-                            <p className="text-gray-600 dark:text-white">{HealthAssessmentNumber?.Sex}</p>
+                            <p className="text-gray-600 dark:text-white">{data?.Sex}</p>
                             <p className="font-semibold text-gray-700 dark:text-white">Assessment Date:</p>
-                            <p className="text-gray-600 dark:text-white">{formatDate(HealthAssessmentNumber?.AssessmentDate)}</p>
+                            <p className="text-gray-600 dark:text-white">{formatDate(data?.AssessmentDate)}</p>
                             <p className="font-semibold text-gray-700 dark:text-white">Effective Year:</p>
-                            <p className="text-gray-600 dark:text-white">{getYear(HealthAssessmentNumber?.AssessmentDate)}</p>
+                            <p className="text-gray-600 dark:text-white">{getYear(data?.AssessmentDate)}</p>
                         </div>
                     </>
                 );
             case 2:
                 return (
                     <div className="grid grid-cols-2 gap-8">
-                        {/* Left Column: Past Medical History and Past Surgery */}
                         <div>
                             <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Past Medical History</h3>
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {pastMedicalHistory.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
+                            <p className="text-gray-600 dark:text-white">{data?.PastMedicalHistory || "No data available"}</p>
                             <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Past Surgery</h3>
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {pastSurgery.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
+                            <p className="text-gray-600 dark:text-white">{data?.PastSurgery || "No data available"}</p>
                         </div>
-
-                        {/* Right Column: Family History and Personal Social History */}
                         <div>
                             <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Family History</h3>
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {familyHistory.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
+                            <p className="text-gray-600 dark:text-white">{data?.FamilyHistory || "No data available"}</p>
                             <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Personal Social History</h3>
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {personalSocialHistory.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
+                            <p className="text-gray-600 dark:text-white">{data?.PersonalSocialHistory || "No data available"}</p>
                         </div>
                     </div>
                 );
@@ -132,104 +117,27 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
                 return (
                     <>
                         <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Immunizations</h3>
-                        <div className="grid grid-cols-2 gap-8">
-                            {/* Left Column */}
-                            <div>
-                                {immunizationsList
-                                    .filter((item) => item.group === "For Children" || item.group === "For Adult")
-                                    .map((item, index) => (
-                                        <div
-                                            key={index}
-                                            className="mb-4"
-                                        >
-                                            <p className="font-semibold text-gray-700 dark:text-white">{item.group}:</p>
-                                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                                {item.vaccines.map((vaccine, idx) => (
-                                                    <li key={idx}>{vaccine}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    ))}
-                            </div>
-                            {/* Right Column */}
-                            <div>
-                                {immunizationsList
-                                    .filter((item) => item.group === "For Pregnant Woman" || item.group === "For Elderly and Immunocompromised")
-                                    .map((item, index) => (
-                                        <div
-                                            key={index}
-                                            className="mb-4"
-                                        >
-                                            <p className="font-semibold text-gray-700 dark:text-white">{item.group}:</p>
-                                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                                {item.vaccines.map((vaccine, idx) => (
-                                                    <li key={idx}>{vaccine}</li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
+                        <p className="text-gray-600 dark:text-white">{data?.Immunizations || "No data available"}</p>
                     </>
                 );
             case 4:
                 return (
                     <>
-                        <>
-                            <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Family Planning</h3>
-                            <p className="text-gray-600 dark:text-white">{familyPlanning}</p>
-                            <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Menstrual History</h3>
-                            <p className="text-gray-600">{menstrualHistory}</p>
-                            <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Pregnancy History</h3>
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {pregnancyHistory.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
-                        </>
+                        <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Family Planning</h3>
+                        <p className="text-gray-600 dark:text-white">{data?.FamilyPlanning || "No data available"}</p>
+                        <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Menstrual History</h3>
+                        <p className="text-gray-600 dark:text-white">{data?.MenstrualHistory || "No data available"}</p>
+                        <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Pregnancy History</h3>
+                        <p className="text-gray-600 dark:text-white">{data?.PregnancyHistory || "No data available"}</p>
                     </>
                 );
             case 5:
                 return (
                     <>
-                        <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Pertinent Physical Examination Findings</h3>
-                        <div className="grid grid-cols-2 gap-8">
-                            {/* Left Column */}
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {physicalExaminationFindings.slice(0, Math.ceil(physicalExaminationFindings.length / 2)).map((item, index) => (
-                                    <li key={index}>
-                                        <strong>{item.split(":")[0]}:</strong> {item.split(":")[1]}
-                                    </li>
-                                ))}
-                            </ul>
-                            {/* Right Column */}
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {physicalExaminationFindings.slice(Math.ceil(physicalExaminationFindings.length / 2)).map((item, index) => (
-                                    <li key={index}>
-                                        <strong>{item.split(":")[0]}:</strong> {item.split(":")[1]}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Pertinent Findings Per System</h3>
-                        <div className="grid grid-cols-2 gap-8">
-                            {/* Left Column */}
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {pertinentFindings.slice(0, Math.ceil(pertinentFindings.length / 2)).map((item, index) => (
-                                    <li key={index}>
-                                        <strong>{item.split(":")[0]}:</strong> {item.split(":")[1]}
-                                    </li>
-                                ))}
-                            </ul>
-                            {/* Right Column */}
-                            <ul className="list-disc pl-5 text-gray-600 dark:text-white">
-                                {pertinentFindings.slice(Math.ceil(pertinentFindings.length / 2)).map((item, index) => (
-                                    <li key={index}>
-                                        <strong>{item.split(":")[0]}:</strong> {item.split(":")[1]}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                        <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-white">Physical Examination Findings</h3>
+                        <p className="text-gray-600 dark:text-white">{data?.PhysicalExaminationFindings || "No data available"}</p>
+                        <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-700 dark:text-white">Pertinent Findings</h3>
+                        <p className="text-gray-600 dark:text-white">{data?.PertinentFindings || "No data available"}</p>
                     </>
                 );
             default:
@@ -254,7 +162,6 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
             <div className="relative h-[65vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white p-8 shadow-xl dark:bg-gray-800 dark:text-white">
-                {/* Close Button */}
                 <button
                     onClick={onClose}
                     className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
@@ -262,15 +169,12 @@ const HealthAssessmentModal = ({ isOpen, onClose, HealthAssessmentNumber }) => {
                     X
                 </button>
 
-                {/* Modal Header */}
                 <div className="mb-6 border-b pb-4">
                     <h2 className="text-3xl font-semibold text-gray-800 dark:text-white">Health Assessment</h2>
                 </div>
 
-                {/* Page Content */}
                 <div>{renderPageContent()}</div>
 
-                {/* Pagination Controls */}
                 <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
                     <button
                         onClick={handlePreviousPage}

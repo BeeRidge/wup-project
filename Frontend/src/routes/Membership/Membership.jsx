@@ -7,6 +7,13 @@ import { FaDownload } from "react-icons/fa";
 import LatestMember from "./LatestMember";
 import FirstTranches from "./FirstTranches";
 import SecondTranches from "./SecondTranches";
+import AddMemberModal from "./component/AddMemberModal";
+import AddHealthAssessmentModal from "./component/AddHealthAssessmentModal";
+import axios from "axios";
+import { FaUserPlus, FaClipboard, FaStethoscope } from "react-icons/fa";
+import AddConsultationModal from "./component/AddConsultationModal";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Membership = () => {
     const [membershipData, setMembershipData] = useState([]); // For Latest Member
@@ -80,8 +87,146 @@ const Membership = () => {
         }
     };
 
+    const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
+
+    const handleAddMember = async (memberData) => {
+        console.log("Adding member:", memberData); // Debugging
+        try {
+            const response = await axios.post("http://localhost:8081/api/add-member", memberData);
+
+            if (response.status === 201) {
+                alert("Member added successfully!");
+                setMembershipData((prev) => [...prev, memberData]); // Update the UI
+            } else {
+                alert("Failed to add member.");
+            }
+        } catch (error) {
+            console.error("Error adding member:", error);
+            alert("An error occurred while adding the member.");
+        }
+    };
+
+    const [isAddHealthAssessmentModalOpen, setIsAddHealthAssessmentModalOpen] = useState(false);
+    const [isAddConsultationModalOpen, setIsAddConsultationModalOpen] = useState(false);
+
+    const handleAddHealthAssessment = async (assessmentData) => {
+        try {
+            const response = await axios.post("http://localhost:8081/api/add-health-assessment", assessmentData);
+
+            if (response.status === 201) {
+                toast.success(response.data.message, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            } else {
+                toast.error("Failed to add consultation.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            }
+        } catch (error) {
+            console.error("Error adding health assessment:", error);
+            toast.error("An error occurred while adding the consultation.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+        });
+    }
+    };
+
+    const handleAddConsultation = async (consultationData) => {
+        console.log("Consultation Data Received:", consultationData); // Debugging
+        try {
+            const response = await axios.post("http://localhost:8081/api/add-consultation", consultationData);
+            if (response.status === 201) {
+                toast.success(response.data.message, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            } else {
+                toast.error("Failed to add consultation.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            }
+        } catch (error) {
+            console.error("Error adding consultation:", error);
+            toast.error("An error occurred while adding the consultation.", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
+    };
+
     return (
         <div className="mt-2 w-full bg-white p-4 dark:bg-gray-800 dark:text-white">
+
+        <ToastContainer />
+            {/* Buttons Section */}
+            <div className="mb-6 flex space-x-4">
+                {/* Add New Member Button */}
+                <button
+                    onClick={() => setIsAddMemberModalOpen(true)}
+                    className="flex items-center space-x-2 rounded-lg bg-green-600 px-4 py-2 text-white shadow-md hover:bg-green-700"
+                >
+                    <FaUserPlus size={18} />
+                    <span>Add New Member</span>
+                </button>
+
+                {/* Add Health Assessment Button */}
+                <button
+                    onClick={() => setIsAddHealthAssessmentModalOpen(true)}
+                    className="flex items-center space-x-2 rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md hover:bg-blue-700"
+                >
+                    <FaClipboard size={18} />
+                    <span>Add Health Assessment</span>
+                </button>
+
+                {/* Add Consultation Button */}
+                <button
+                    onClick={() => setIsAddConsultationModalOpen(true)}
+                    className="flex items-center space-x-2 rounded-lg bg-purple-600 px-4 py-2 text-white shadow-md hover:bg-purple-700"
+                >
+                    <FaStethoscope size={18} />
+                    <span>Add Consultation</span>
+                </button>
+            </div>
+
             {/* Tranche selection buttons */}
             <div className="flex space-x-4">
                 <button
@@ -140,6 +285,25 @@ const Membership = () => {
 
             {/* Render the appropriate batch component */}
             {renderBatchTranche()}
+
+            {/* Add Member Modal */}
+            <AddMemberModal
+                isOpen={isAddMemberModalOpen}
+                onClose={() => setIsAddMemberModalOpen(false)}
+                onSave={handleAddMember} // Pass the correct handler
+            />
+
+            <AddHealthAssessmentModal
+                isOpen={isAddHealthAssessmentModalOpen}
+                onClose={() => setIsAddHealthAssessmentModalOpen(false)}
+                onSave={handleAddHealthAssessment}
+            />
+
+            <AddConsultationModal
+                isOpen={isAddConsultationModalOpen}
+                onClose={() => setIsAddConsultationModalOpen(false)}
+                onSave={handleAddConsultation}
+            />
 
             {/* Pagination */}
             <div className="mt-4 flex items-center justify-between">
