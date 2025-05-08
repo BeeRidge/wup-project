@@ -76,18 +76,17 @@ const DashboardPage = () => {
             <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
             <StatsCard eKonsultaData={eKonsultaData} />
             <div className="flex w-full gap-6">
-                <PatientSatisfaction
-                    satisfactionData={satisfactionData}
-                    satisfactionPercentage={eKonsultaData.patientSatisfaction}
-                />
+            
                 <TrancheDataBreakdown
                     firstTranche={eKonsultaData.firstTranche}
                     secondTranche={eKonsultaData.secondTranche}
                 />
+
+<TopDiagnosedConditions diagnosedConditions={diagnosedConditions} />
             </div>
             <div className="flex flex-col lg:flex-row w-full gap-6 justify-start">
                 <MonthlyConsultations consultationTrends={consultationTrends} />
-                <TopDiagnosedConditions diagnosedConditions={diagnosedConditions} />
+              
             </div>
 
         </div >

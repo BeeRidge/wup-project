@@ -80,15 +80,16 @@ const ReportPage = () => {
     const [isModalOpenConsultation, setIsModalOpenConsultation] = useState(false);
     const [selectedConsultation, setSelectedConsultation] = useState(null);
 
-    const openModalConsultation = (patient) => {
-        setSelectedConsultation(patient.HSANumber);
-        setIsModalOpenConsultation(true);
+    const openModalConsultation = (consultationNumber) => {
+        console.log("Selected Consultation Number:", consultationNumber); // Debugging statement
+        setSelectedConsultation(consultationNumber); // Set the selected consultation number
+        setIsModalOpenConsultation(true); // Open the modal
     };
 
     const closeModalConsultation = () => {
-        setIsModalOpenConsultation(false);
-        setSelectedConsultation(null);
-    };
+        setIsModalOpenConsultation(false); // Close the modal
+        setSelectedConsultation(null); // Clear the selected consultation number
+    }
     /* end */
 
     useEffect(() => {
@@ -253,7 +254,7 @@ const ReportPage = () => {
                                         </td>
                                         <td
                                             className="cursor-pointer border border-gray-300 px-4 py-2 text-blue-500 hover:underline"
-                                            onClick={() => openModalConsultation(patient)}
+                                            onClick={() => openModalConsultation(patient.ConNumber)} // Pass only the ConNumber
                                         >
                                             {patient.ConNumber}
                                         </td>
@@ -293,7 +294,7 @@ const ReportPage = () => {
                 <ConsultationNumber
                     isOpen={isModalOpenConsultation}
                     onClose={closeModalConsultation}
-                    consultationNumber={selectedConsultation}
+                    consultationNumber={selectedConsultation} // Pass the selected consultation number
                 />
 
                 {/* Pagination */}

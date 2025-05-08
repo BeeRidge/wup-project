@@ -707,3 +707,245 @@ app.post('/api/add-consultation', (req, res) => {
         });
     });
 });
+
+app.get('/api/consultations', (req, res) => {
+    const sql = `
+        SELECT 
+            PinNumber,
+            ConNumber,
+            ConsultationDate,
+            ChiefComplaint,
+            BloodPressure,
+            HeartRate,
+            RespiratoryRate,
+            VisualAcuityLeftEye,
+            VisualAcuityRightEye,
+            Height,
+            Weight,
+            BMI,
+            Temperature,
+            HEENT,
+            ChestBreastLungs,
+            Heart,
+            Abdomen,
+            Genitourinary,
+            RectalExam,
+            ExtremitiesSkin,
+            NeurologicalExam,
+            AssessmentDiagnosis,
+            Laboratory,
+            HSANumber
+        FROM consultation
+    `;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error("Error fetching consultations:", err.message);
+            return res.status(500).json({ error: "Failed to fetch consultations." });
+        }
+
+        console.log("Consultations fetched:", results.length); // Debugging
+        return res.json(results);
+    });
+});
+
+app.get('/api/consultation/:ConNumber', (req, res) => {
+    const { ConNumber } = req.params;
+
+    const sql = `
+        SELECT 
+            PinNumber,
+            ConNumber,
+            ConsultationDate,
+            ChiefComplaint,
+            BloodPressure,
+            HeartRate,
+            RespiratoryRate,
+            VisualAcuityLeftEye,
+            VisualAcuityRightEye,
+            Height,
+            Weight,
+            BMI,
+            Temperature,
+            HEENT,
+            ChestBreastLungs,
+            Heart,
+            Abdomen,
+            Genitourinary,
+            RectalExam,
+            ExtremitiesSkin,
+            NeurologicalExam,
+            AssessmentDiagnosis,
+            Laboratory,
+            HSANumber
+        FROM consultation
+        WHERE ConNumber = ?
+    `;
+
+    db.query(sql, [ConNumber], (err, result) => {
+        if (err) {
+            console.error("Error fetching consultation:", err.message);
+            return res.status(500).json({ error: "Failed to fetch consultation." });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: "Consultation not found." });
+        }
+
+        console.log("Consultation fetched:", result[0]); // Debugging
+        return res.json(result[0]);
+    });
+});
+
+app.post('/api/update-balance', (req, res) => {
+    const { PinNumber, actionType } = req.body;
+
+    if (!PinNumber || !actionType) {
+        return res.status(400).json({ error: "PinNumber and actionType are required." });
+    }
+
+    // Define the deduction amounts
+    const DEDUCTIONS = {
+        Consultation: 500,
+        Laboratory: 1000,
+    };
+
+    // Fetch the user's details
+    const fetchUserSql = `
+        SELECT MemberType, Balance 
+        FROM member 
+        WHERE PinNumber = ?
+    `;
+
+    db.query(fetchUserSql, [PinNumber], (err, result) => {
+        if (err) {
+            console.error("Error fetching user details:", err.message);
+            return res.status(500).json({ error: "Failed to fetch user details." });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        const user = result[0];
+        let newBalance = user.Balance;
+
+        // Set initial balance based on MemberType
+        if (user.MemberType === "NonMember") {
+            newBalance = 1700;
+        } else if (user.MemberType === "Member") {
+            newBalance = 1500;
+        }
+
+        // Deduct balance based on the action type
+        if (actionType === "Consultation") {
+            newBalance -= DEDUCTIONS.Consultation;
+        } else if (actionType === "Laboratory") {
+            newBalance = 0; // Set balance to 0 for laboratory
+        } else {
+            return res.status(400).json({ error: "Invalid actionType provided." });
+        }
+
+        // Ensure the balance doesn't go below zero
+        if (newBalance < 0) {
+            return res.status(400).json({ error: "Insufficient balance." });
+        }
+
+        // Update the user's balance in the database
+        const updateBalanceSql = `
+            UPDATE member 
+            SET Balance = ? 
+            WHERE PinNumber = ?
+        `;
+
+        db.query(updateBalanceSql, [newBalance, PinNumber], (updateErr) => {
+            if (updateErr) {
+                console.error("Error updating balance:", updateErr.message);
+                return res.status(500).json({ error: "Failed to update balance." });
+            }
+
+            return res.json({ message: "Balance updated successfully.", newBalance });
+        });
+    });
+});
+
+app.post('/api/update-all-balances', (req, res) => {
+    const fetchUsersSql = `
+        SELECT PinNumber, MemberType, Balance 
+        FROM member
+    `;
+
+    db.query(fetchUsersSql, (err, users) => {
+        if (err) {
+            console.error("Error fetching users:", err.message);
+            return res.status(500).json({ error: "Failed to fetch users." });
+        }
+
+        const updatePromises = users.map((user) => {
+            return new Promise((resolve, reject) => {
+                // Check if the user has a consultation
+                const checkConsultationSql = `
+                    SELECT Laboratory 
+                    FROM consultation 
+                    WHERE PinNumber = ?
+                `;
+
+                db.query(checkConsultationSql, [user.PinNumber], (err, consultations) => {
+                    if (err) {
+                        console.error("Error checking consultations for user:", user.PinNumber, err.message);
+                        return reject(err);
+                    }
+
+                    let newBalance = user.Balance;
+
+                    // Set initial balance based on MemberType
+                    if (user.MemberType === "NonMember") {
+                        newBalance = 1700;
+                    } else if (user.MemberType === "Member") {
+                        newBalance = 1500;
+                    }
+
+                    // Deduct balance based on consultation and laboratory
+                    if (consultations.length > 0) {
+                        newBalance -= 500; // Deduct for consultation
+                        const hasLaboratory = consultations.some((c) => c.Laboratory !== null);
+                        if (hasLaboratory) {
+                            newBalance = 0; // Set balance to 0 if laboratory exists
+                        }
+                    }
+
+                    // Ensure the balance does not go below zero
+                    if (newBalance < 0) {
+                        newBalance = 0;
+                    }
+
+                    // Update the user's balance in the database
+                    const updateBalanceSql = `
+                        UPDATE member 
+                        SET Balance = ? 
+                        WHERE PinNumber = ?
+                    `;
+
+                    db.query(updateBalanceSql, [newBalance, user.PinNumber], (updateErr) => {
+                        if (updateErr) {
+                            console.error("Error updating balance for user:", user.PinNumber, updateErr.message);
+                            return reject(updateErr);
+                        }
+
+                        resolve();
+                    });
+                });
+            });
+        });
+
+        Promise.all(updatePromises)
+            .then(() => {
+                res.json({ message: "All balances updated successfully." });
+            })
+            .catch((updateErr) => {
+                console.error("Error updating balances:", updateErr.message);
+                res.status(500).json({ error: "Failed to update balances." });
+            });
+    });
+});
+
