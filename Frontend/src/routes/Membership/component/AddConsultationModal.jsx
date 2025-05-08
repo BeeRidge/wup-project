@@ -3,34 +3,34 @@ import React, { useState } from "react";
 const AddConsultationModal = ({ isOpen, onClose, onSave }) => {
     const [currentStep, setCurrentStep] = useState(1); // Track the current step
     const [formData, setFormData] = useState({
-        PinNumber: "", 
-        ConsultationNumber: "", 
-        ConsultationDate: "", 
-        ChiefComplaint: "", 
+        PinNumber: "",
+        ConsultationNumber: "",
+        ConsultationDate: "",
+        ChiefComplaint: "",
         physicalExam: {
-            BloodPressure: "", 
-            HeartRate: "", 
-            RespiratoryRate: "", 
-            VisualAcuityLeftEye: "", 
-            VisualAcuityRightEye: "", 
-            Height: "", 
-            Weight: "", 
-            BMI: "", 
-            Temperature: "", 
-            HSANumber: "", 
+            BloodPressure: "",
+            HeartRate: "",
+            RespiratoryRate: "",
+            VisualAcuityLeftEye: "",
+            VisualAcuityRightEye: "",
+            Height: "",
+            Weight: "",
+            BMI: "",
+            Temperature: "",
+            HSANumber: "",
         },
         PertinentFindings: {
-            HEENT: "", 
-            ChestBreastLungs: "", 
-            Heart: "", 
-            Abdomen: "", 
-            Genitourinary: "", 
-            RectalExam: "", 
-            ExtremitiesSkin: "", 
-            NeurologicalExam: "", 
+            HEENT: "",
+            ChestBreastLungs: "",
+            Heart: "",
+            Abdomen: "",
+            Genitourinary: "",
+            RectalExam: "",
+            ExtremitiesSkin: "",
+            NeurologicalExam: "",
         },
-        AssessmentDiagnosis: "", 
-        Laboratory: "", 
+        AssessmentDiagnosis: "",
+        Laboratory: "",
     });
 
     const handleNext = () => {
@@ -177,131 +177,130 @@ const AddConsultationModal = ({ isOpen, onClose, onSave }) => {
                     </div>
                 )}
 
-{currentStep === 2 && (
-    <div>
-        <h3 className="mb-4 text-lg font-semibold text-gray-700 dark:text-gray-300">Objective Physical Examination</h3>
-        <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">Enter the patient's vital signs and physical measurements.</p>
+                {currentStep === 2 && (
+                    <div>
+                        <h3 className="mb-4 text-lg font-semibold text-gray-700 dark:text-gray-300">Objective Physical Examination</h3>
+                        <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">Enter the patient's vital signs and physical measurements.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Height */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Height (cm)</label>
-                <input
-                    type="text"
-                    name="Height"
-                    value={formData.physicalExam.Height}
-                    onChange={(e) => handleNestedChange("physicalExam", "Height", e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            {/* Height */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Height (cm)</label>
+                                <input
+                                    type="text"
+                                    name="Height"
+                                    value={formData.physicalExam.Height}
+                                    onChange={(e) => handleNestedChange("physicalExam", "Height", e.target.value)}
+                                    className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                />
+                            </div>
 
-            {/* Weight */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Weight (kg)</label>
-                <input
-                    type="text"
-                    name="Weight"
-                    value={formData.physicalExam.Weight}
-                    onChange={(e) => handleNestedChange("physicalExam", "Weight", e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                            {/* Weight */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Weight (kg)</label>
+                                <input
+                                    type="text"
+                                    name="Weight"
+                                    value={formData.physicalExam.Weight}
+                                    onChange={(e) => handleNestedChange("physicalExam", "Weight", e.target.value)}
+                                    className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                />
+                            </div>
 
-            {/* Blood Pressure */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Blood Pressure (mmHg)</label>
-                <input
-                    type="text"
-                    name="BloodPressure"
-                    value={formData.physicalExam.BloodPressure}
-                    onChange={(e) => handleNestedChange("physicalExam", "BloodPressure", e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                            {/* Blood Pressure */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Blood Pressure (mmHg)</label>
+                                <input
+                                    type="text"
+                                    name="BloodPressure"
+                                    value={formData.physicalExam.BloodPressure}
+                                    onChange={(e) => handleNestedChange("physicalExam", "BloodPressure", e.target.value)}
+                                    className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                />
+                            </div>
 
-            {/* Heart Rate */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Heart Rate (min)</label>
-                <input
-                    type="text"
-                    name="HeartRate"
-                    value={formData.physicalExam.HeartRate}
-                    onChange={(e) => handleNestedChange("physicalExam", "HeartRate", e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                            {/* Heart Rate */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Heart Rate (min)</label>
+                                <input
+                                    type="text"
+                                    name="HeartRate"
+                                    value={formData.physicalExam.HeartRate}
+                                    onChange={(e) => handleNestedChange("physicalExam", "HeartRate", e.target.value)}
+                                    className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                />
+                            </div>
 
-            {/* Respiratory Rate */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Respiratory Rate (min)</label>
-                <input
-                    type="text"
-                    name="RespiratoryRate"
-                    value={formData.physicalExam.RespiratoryRate}
-                    onChange={(e) => handleNestedChange("physicalExam", "RespiratoryRate", e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                            {/* Respiratory Rate */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Respiratory Rate (min)</label>
+                                <input
+                                    type="text"
+                                    name="RespiratoryRate"
+                                    value={formData.physicalExam.RespiratoryRate}
+                                    onChange={(e) => handleNestedChange("physicalExam", "RespiratoryRate", e.target.value)}
+                                    className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                />
+                            </div>
 
-            {/* Temperature */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Temperature (°C)</label>
-                <input
-                    type="text"
-                    name="Temperature"
-                    value={formData.physicalExam.Temperature}
-                    onChange={(e) => handleNestedChange("physicalExam", "Temperature", e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                            {/* Temperature */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Temperature (°C)</label>
+                                <input
+                                    type="text"
+                                    name="Temperature"
+                                    value={formData.physicalExam.Temperature}
+                                    onChange={(e) => handleNestedChange("physicalExam", "Temperature", e.target.value)}
+                                    className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                />
+                            </div>
 
-            {/* BMI */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">BMI</label>
-                <div className="flex gap-2 items-center">
-                    <input
-                        type="text"
-                        name="BMI"
-                        readOnly
-                        value={formData.physicalExam.BMI}
-                        className="w-full p-2 rounded border border-gray-300 bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    />
-                    <button
-                        type="button"
-                        onClick={calculateBMI}
-                        className="shrink-0 rounded bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
-                    >
-                        Get BMI
-                    </button>
-                </div>
-            </div>
+                            {/* BMI */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">BMI</label>
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        name="BMI"
+                                        readOnly
+                                        value={formData.physicalExam.BMI}
+                                        className="w-full rounded border border-gray-300 bg-gray-100 p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={calculateBMI}
+                                        className="shrink-0 rounded bg-blue-500 px-3 py-2 text-white hover:bg-blue-600"
+                                    >
+                                        Get BMI
+                                    </button>
+                                </div>
+                            </div>
 
-            {/* Visual Acuity */}
-            <div>
-                <label className="block font-medium text-gray-600 dark:text-gray-400 mb-1">Visual Acuity</label>
-                <div className="flex gap-2">
-                    <input
-                        type="text"
-                        name="VisualAcuityLeftEye"
-                        placeholder="Left Eye"
-                        value={formData.physicalExam.VisualAcuityLeftEye}
-                        onChange={(e) => handleNestedChange("physicalExam", "VisualAcuityLeftEye", e.target.value)}
-                        className="w-1/2 p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    />
-                    <input
-                        type="text"
-                        name="VisualAcuityRightEye"
-                        placeholder="Right Eye"
-                        value={formData.physicalExam.VisualAcuityRightEye}
-                        onChange={(e) => handleNestedChange("physicalExam", "VisualAcuityRightEye", e.target.value)}
-                        className="w-1/2 p-2 rounded border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    />
-                </div>
-            </div>
-        </div>
-    </div>
-)}
-
+                            {/* Visual Acuity */}
+                            <div>
+                                <label className="mb-1 block font-medium text-gray-600 dark:text-gray-400">Visual Acuity</label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        name="VisualAcuityLeftEye"
+                                        placeholder="Left Eye"
+                                        value={formData.physicalExam.VisualAcuityLeftEye}
+                                        onChange={(e) => handleNestedChange("physicalExam", "VisualAcuityLeftEye", e.target.value)}
+                                        className="w-1/2 rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                    />
+                                    <input
+                                        type="text"
+                                        name="VisualAcuityRightEye"
+                                        placeholder="Right Eye"
+                                        value={formData.physicalExam.VisualAcuityRightEye}
+                                        onChange={(e) => handleNestedChange("physicalExam", "VisualAcuityRightEye", e.target.value)}
+                                        className="w-1/2 rounded border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Step 3: Pertinent Findings */}
                 {currentStep === 3 && (
