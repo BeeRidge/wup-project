@@ -12,7 +12,9 @@ import MonthlyConsultations from "./components/MonthlyConsultations";
 import TopDiagnosedConditions from "./components/TopDiagnosedConditions";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-
+import TrancheValues from "./components/TrancheValues";
+import FirstTrancheChart from "./components/FirstTrancheChart";
+import SecondTrancheChart from "./components/SecondTrancheChart";
 const DashboardPage = () => {
     const { theme, setTheme } = useTheme();
     const location = useLocation();
@@ -75,7 +77,15 @@ const DashboardPage = () => {
         <div className="relative flex w-full flex-wrap gap-6">
             <div className="flex-1"> {status && <AuthMessage status={status} />}</div>
             <StatsCard eKonsultaData={eKonsultaData} />
+            
+
+            <div className="flex w-full flex-wrap gap-6">
+                <div className="min-w-[280px] flex-1">
+                    <TrancheValues/>
+                </div>
+            </div>
             <div className="flex w-full gap-6">
+                
             
                 <TrancheDataBreakdown
                     firstTranche={eKonsultaData.firstTranche}
@@ -84,10 +94,14 @@ const DashboardPage = () => {
 
 <TopDiagnosedConditions diagnosedConditions={diagnosedConditions} />
             </div>
-            <div className="flex flex-col lg:flex-row w-full gap-6 justify-start">
+            <div className="flex flex-row lg:flex-row w-full gap-6 justify-start">
                 <MonthlyConsultations consultationTrends={consultationTrends} />
-              
             </div>
+            
+            <FirstTrancheChart />
+
+                <SecondTrancheChart
+                />
 
         </div >
     );

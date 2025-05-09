@@ -72,6 +72,7 @@ const StatsCard = () => {
                     <span className="text-2xl font-bold">{memberData.secondTranche}</span>
                 </CardContent>
             </Card>
+            
         </div>
     );
 };

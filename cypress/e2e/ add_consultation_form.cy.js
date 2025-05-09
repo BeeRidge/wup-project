@@ -10,9 +10,9 @@ describe('Add Consultation Form Test', () => {
       // Open the Add Consultation Modal
       cy.contains('Add Consultation').click();
 
-      cy.get('input[name="PinNumber"]').type('PIN09212025283167');
-      cy.get('input[name="HSANumber"]').type('821321322132132'); 
-      cy.get('input[name="ConsultationNumber"]').type('CON6789'); // Replace with a valid Pin Number// Replace with a valid Consultation Number
+      cy.get('input[name="PinNumber"]').type('PIN09212025283170');
+      cy.get('input[name="HSANumber"]').type('123456789'); 
+      cy.get('input[name="ConsultationNumber"]').type('CON6790'); // Replace with a valid Pin Number// Replace with a valid Consultation Number
       cy.get('input[name="ConsultationDate"]').type('2025-05-08'); 
 
       // Step 1: Fill out Chief Complaint (Radio Button)
